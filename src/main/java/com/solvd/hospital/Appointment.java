@@ -67,4 +67,16 @@ public class Appointment {
         SCHEDULED, DONE, CANCELLED
     }
 
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "id=" + id +
+                ", patient=" + patient +
+                ", doctor=" + doctor +
+                ", scheduledAt=" + scheduledAt +
+                ", status=" + status +
+                ", notes='" + notes + '\'' +
+                '}';
+    }
+
 }
