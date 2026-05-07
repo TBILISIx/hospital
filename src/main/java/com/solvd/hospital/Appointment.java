@@ -8,7 +8,7 @@ public class Appointment {
         SCHEDULED, DONE, CANCELLED
     }
 
-    private Integer id;
+    private Long id;
     private Doctor doctor;
     private LocalDateTime scheduledAt;
     private AppointmentStatus status;
@@ -23,7 +23,7 @@ public class Appointment {
         this.status = AppointmentStatus.SCHEDULED;
     }
 
-    public Appointment(Integer id, Doctor doctor, LocalDateTime scheduledAt, AppointmentStatus status, String notes) {
+    public Appointment(Long id, Doctor doctor, LocalDateTime scheduledAt, AppointmentStatus status, String notes) {
         this.id = id;
         this.doctor = doctor;
         this.scheduledAt = scheduledAt;
@@ -31,24 +31,45 @@ public class Appointment {
         this.notes = notes;
     }
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Doctor getDoctor() { return doctor; }
-    public void setDoctor(Doctor doctor) { this.doctor = doctor; }
+    public Doctor getDoctor() {
+        return doctor;
+    }
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
 
-    public LocalDateTime getScheduledAt() { return scheduledAt; }
-    public void setScheduledAt(LocalDateTime scheduledAt) { this.scheduledAt = scheduledAt; }
+    public LocalDateTime getScheduledAt() {
+        return scheduledAt;
+    }
+    public void setScheduledAt(LocalDateTime scheduledAt) {
+        this.scheduledAt = scheduledAt;
+    }
 
-    public AppointmentStatus getStatus() { return status; }
-    public void setStatus(AppointmentStatus status) { this.status = status; }
+    public AppointmentStatus getStatus() {
+        return status;
+    }
+    public void setStatus(AppointmentStatus status) {
+        this.status = status;
+    }
 
-    public String getNotes() { return notes; }
-    public void setNotes(String notes) { this.notes = notes; }
+    public String getNotes() {
+        return notes;
+    }
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 
     @Override
     public String toString() {
         return "Appointment{id=" + id + ", doctor=" + doctor +
                 ", scheduledAt=" + scheduledAt + ", status=" + status + ", notes='" + notes + "'}";
     }
+
 }

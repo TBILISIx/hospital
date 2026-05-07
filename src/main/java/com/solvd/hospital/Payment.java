@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 public class Payment {
 
-    private Integer id;
+    private Long id;
     private LocalDate issuedDate;
     private BigDecimal totalAmount;
     private BigDecimal paidAmount;
@@ -21,7 +21,7 @@ public class Payment {
         this.paid = false;
     }
 
-    public Payment(Integer id, LocalDate issuedDate, BigDecimal totalAmount, BigDecimal paidAmount, boolean paid) {
+    public Payment(Long id, LocalDate issuedDate, BigDecimal totalAmount, BigDecimal paidAmount, boolean paid) {
         this.id = id;
         this.issuedDate = issuedDate;
         this.totalAmount = totalAmount;
@@ -29,24 +29,45 @@ public class Payment {
         this.paid = paid;
     }
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public LocalDate getIssuedDate() { return issuedDate; }
-    public void setIssuedDate(LocalDate issuedDate) { this.issuedDate = issuedDate; }
+    public LocalDate getIssuedDate() {
+        return issuedDate;
+    }
+    public void setIssuedDate(LocalDate issuedDate) {
+        this.issuedDate = issuedDate;
+    }
 
-    public BigDecimal getTotalAmount() { return totalAmount; }
-    public void setTotalAmount(BigDecimal totalAmount) { this.totalAmount = totalAmount; }
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 
-    public BigDecimal getPaidAmount() { return paidAmount; }
-    public void setPaidAmount(BigDecimal paidAmount) { this.paidAmount = paidAmount; }
+    public BigDecimal getPaidAmount() {
+        return paidAmount;
+    }
+    public void setPaidAmount(BigDecimal paidAmount) {
+        this.paidAmount = paidAmount;
+    }
 
-    public boolean isPaid() { return paid; }
-    public void setPaid(boolean paid) { this.paid = paid; }
+    public boolean isPaid() {
+        return paid;
+    }
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
 
     @Override
     public String toString() {
         return "Payment{id=" + id + ", issuedDate=" + issuedDate +
                 ", totalAmount=" + totalAmount + ", paidAmount=" + paidAmount + ", paid=" + paid + "}";
     }
+
 }

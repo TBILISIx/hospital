@@ -29,23 +29,47 @@ public class MedicalClinic {
         this.departments = departments;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
+    public String getAddress() {
+        return address;
+    }
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-    public Long getTotalPatientRooms() { return totalPatientRooms; }
-    public void setTotalPatientRooms(Long totalPatientRooms) { this.totalPatientRooms = totalPatientRooms; }
+    public Long getTotalPatientRooms() {
+        return totalPatientRooms;
+    }
+    public void setTotalPatientRooms(Long totalPatientRooms) {
+        this.totalPatientRooms = totalPatientRooms;
+    }
 
-    public Long getOccupiedPatientRooms() { return occupiedPatientRooms; }
-    public void setOccupiedPatientRooms(Long occupiedPatientRooms) { this.occupiedPatientRooms = occupiedPatientRooms; }
+    public Long getOccupiedPatientRooms() {
+        return occupiedPatientRooms;
+    }
+    public void setOccupiedPatientRooms(Long occupiedPatientRooms) {
+        this.occupiedPatientRooms = occupiedPatientRooms;
+    }
 
-    public List<Department> getDepartments() { return departments; }
-    public void setDepartments(List<Department> departments) { this.departments = departments; }
+    public List<Department> getDepartments() {
+        return departments;
+    }
+    public void setDepartments(List<Department> departments) {
+        this.departments = departments;
+    }
 
     @Override
     public String toString() {

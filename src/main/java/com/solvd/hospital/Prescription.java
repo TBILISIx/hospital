@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Prescription {
 
-    private Integer id;
+    private Long id;
     private Doctor doctor;
     private LocalDate issuedDate;
     private List<PrescriptionMedication> medications = new ArrayList<>();
@@ -20,7 +20,7 @@ public class Prescription {
         this.issuedDate = issuedDate;
     }
 
-    public Prescription(Integer id, Doctor doctor, LocalDate issuedDate, List<PrescriptionMedication> medications, String instructions) {
+    public Prescription(Long id, Doctor doctor, LocalDate issuedDate, List<PrescriptionMedication> medications, String instructions) {
         this.id = id;
         this.doctor = doctor;
         this.issuedDate = issuedDate;
@@ -28,20 +28,40 @@ public class Prescription {
         this.instructions = instructions;
     }
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Doctor getDoctor() { return doctor; }
-    public void setDoctor(Doctor doctor) { this.doctor = doctor; }
+    public Doctor getDoctor() {
+        return doctor;
+    }
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
 
-    public LocalDate getIssuedDate() { return issuedDate; }
-    public void setIssuedDate(LocalDate issuedDate) { this.issuedDate = issuedDate; }
+    public LocalDate getIssuedDate() {
+        return issuedDate;
+    }
+    public void setIssuedDate(LocalDate issuedDate) {
+        this.issuedDate = issuedDate;
+    }
 
-    public List<PrescriptionMedication> getMedications() { return medications; }
-    public void setMedications(List<PrescriptionMedication> medications) { this.medications = medications; }
+    public List<PrescriptionMedication> getMedications() {
+        return medications;
+    }
+    public void setMedications(List<PrescriptionMedication> medications) {
+        this.medications = medications;
+    }
 
-    public String getInstructions() { return instructions; }
-    public void setInstructions(String instructions) { this.instructions = instructions; }
+    public String getInstructions() {
+        return instructions;
+    }
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
+    }
 
     @Override
     public String toString() {
@@ -49,4 +69,5 @@ public class Prescription {
                 ", issuedDate=" + issuedDate + ", medications=" + medications +
                 ", instructions='" + instructions + "'}";
     }
+
 }
