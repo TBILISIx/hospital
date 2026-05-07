@@ -14,6 +14,10 @@ public class Appointment {
     private Patient patient;
     private Doctor doctor;
     private LocalDateTime scheduledAt;
-    private String status;           // "SCHEDULED", "DONE", "CANCELLED" later for enums if needed
+    private AppointmentStatus status;
     private String notes;
+
+    public enum AppointmentStatus {
+        SCHEDULED, DONE, CANCELLED
+    }
 }

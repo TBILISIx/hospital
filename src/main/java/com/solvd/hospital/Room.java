@@ -10,8 +10,12 @@ import lombok.NoArgsConstructor;
 public class Room {
     private Long id;
     private String roomNumber;
-    private String type;             // "ICU", "GENERAL", "SURGERY"
+    private RoomType type;
     private int capacity;
     private boolean occupied;
     private Department department;
+
+    public enum RoomType {
+        ICU, GENERAL, SURGERY, RECOVERY, PRIVATE
+    }
 }

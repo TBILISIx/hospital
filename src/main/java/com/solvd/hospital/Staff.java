@@ -13,8 +13,12 @@ public class Staff {
     private Long id;
     private String firstName;
     private String lastName;
-    private String role;             // "NURSE", "RECEPTIONIST", "TECHNICIAN"
+    private StaffRole role;
     private Department department;
     private LocalDate hireDate;
     private boolean active;
+
+    public enum StaffRole {
+        NURSE, RECEPTIONIST, TECHNICIAN, ADMIN, PORTER
+    }
 }

@@ -1,5 +1,6 @@
 package com.solvd.hospital;
 
+import com.solvd.hospital.enums.BloodType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ public class MedicalRecord {
     private Long id;
     private Patient patient;
     private LocalDate createdDate;
-    private String bloodType;
+    private BloodType bloodType;
     private List<String> allergies = new ArrayList<>();
     private String notes;
 
