@@ -1,4 +1,4 @@
-package com.solvd.hospital;
+package com.solvd.hospital.enums;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

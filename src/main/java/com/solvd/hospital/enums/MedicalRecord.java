@@ -1,6 +1,4 @@
-package com.solvd.hospital;
-
-import com.solvd.hospital.enums.BloodType;
+package com.solvd.hospital.enums;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

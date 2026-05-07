@@ -1,4 +1,4 @@
-package com.solvd.hospital;
+package com.solvd.hospital.enums;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
