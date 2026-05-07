@@ -18,4 +18,5 @@ public class Payment {
     private BigDecimal totalAmount;
     private BigDecimal paidAmount;
     private boolean paid;
+    //
 }
