@@ -9,6 +9,7 @@ public class Appointment {
     }
 
     private Long id;
+    private Long patientId;
     private Doctor doctor;
     private LocalDateTime scheduledAt;
     private AppointmentStatus status;
@@ -23,8 +24,9 @@ public class Appointment {
         this.status = AppointmentStatus.SCHEDULED;
     }
 
-    public Appointment(Long id, Doctor doctor, LocalDateTime scheduledAt, AppointmentStatus status, String notes) {
+    public Appointment(Long id, Long patientId, Doctor doctor, LocalDateTime scheduledAt, AppointmentStatus status, String notes) {
         this.id = id;
+        this.patientId = patientId;
         this.doctor = doctor;
         this.scheduledAt = scheduledAt;
         this.status = status;
@@ -36,6 +38,13 @@ public class Appointment {
     }
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getPatientId() {
+        return patientId;
+    }
+    public void setPatientId(Long patientId) {
+        this.patientId = patientId;
     }
 
     public Doctor getDoctor() {
@@ -68,8 +77,9 @@ public class Appointment {
 
     @Override
     public String toString() {
-        return "Appointment{id=" + id + ", doctor=" + doctor +
-                ", scheduledAt=" + scheduledAt + ", status=" + status + ", notes='" + notes + "'}";
+        return "Appointment{id=" + id + ", patientId=" + patientId +
+                ", doctor=" + doctor + ", scheduledAt=" + scheduledAt +
+                ", status=" + status + ", notes='" + notes + "'}";
     }
 
 }

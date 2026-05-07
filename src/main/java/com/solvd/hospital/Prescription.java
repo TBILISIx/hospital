@@ -7,6 +7,7 @@ import java.util.List;
 public class Prescription {
 
     private Long id;
+    private Long patientId;
     private Doctor doctor;
     private LocalDate issuedDate;
     private List<PrescriptionMedication> medications = new ArrayList<>();
@@ -20,8 +21,9 @@ public class Prescription {
         this.issuedDate = issuedDate;
     }
 
-    public Prescription(Long id, Doctor doctor, LocalDate issuedDate, List<PrescriptionMedication> medications, String instructions) {
+    public Prescription(Long id, Long patientId, Doctor doctor, LocalDate issuedDate, List<PrescriptionMedication> medications, String instructions) {
         this.id = id;
+        this.patientId = patientId;
         this.doctor = doctor;
         this.issuedDate = issuedDate;
         this.medications = medications;
@@ -33,6 +35,13 @@ public class Prescription {
     }
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getPatientId() {
+        return patientId;
+    }
+    public void setPatientId(Long patientId) {
+        this.patientId = patientId;
     }
 
     public Doctor getDoctor() {
@@ -65,9 +74,9 @@ public class Prescription {
 
     @Override
     public String toString() {
-        return "Prescription{id=" + id + ", doctor=" + doctor +
-                ", issuedDate=" + issuedDate + ", medications=" + medications +
-                ", instructions='" + instructions + "'}";
+        return "Prescription{id=" + id + ", patientId=" + patientId +
+                ", doctor=" + doctor + ", issuedDate=" + issuedDate +
+                ", medications=" + medications + ", instructions='" + instructions + "'}";
     }
 
 }

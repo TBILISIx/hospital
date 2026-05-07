@@ -7,6 +7,7 @@ public class Doctor {
     private String lastName;
     private String specialization;
     private boolean available;
+    private Long departmentId;
 
     public Doctor() {
     }
@@ -17,12 +18,13 @@ public class Doctor {
         this.specialization = specialization;
     }
 
-    public Doctor(Long id, String firstName, String lastName, String specialization, boolean available) {
+    public Doctor(Long id, String firstName, String lastName, String specialization, boolean available, Long departmentId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.specialization = specialization;
         this.available = available;
+        this.departmentId = departmentId;
     }
 
     public Long getId() {
@@ -60,10 +62,18 @@ public class Doctor {
         this.available = available;
     }
 
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
     @Override
     public String toString() {
         return "Doctor{id=" + id + ", firstName='" + firstName + "', lastName='" + lastName +
-                "', specialization='" + specialization + "', available=" + available + "}";
+                "', specialization='" + specialization + "', available=" + available +
+                ", departmentId=" + departmentId + "}";
     }
 
 }
