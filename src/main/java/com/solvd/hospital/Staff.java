@@ -8,7 +8,7 @@ public class Staff {
         NURSE, RECEPTIONIST, TECHNICIAN
     }
 
-    private Integer id;
+    private Long id;
     private String firstName;
     private String lastName;
     private StaffRole role;
@@ -26,7 +26,7 @@ public class Staff {
         this.active = true;
     }
 
-    public Staff(Integer id, String firstName, String lastName, StaffRole role, LocalDate hireDate, boolean active) {
+    public Staff(Long id, String firstName, String lastName, StaffRole role, LocalDate hireDate, boolean active) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -35,27 +35,52 @@ public class Staff {
         this.active = active;
     }
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getFirstName() { return firstName; }
-    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public String getFirstName() {
+        return firstName;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-    public String getLastName() { return lastName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-    public StaffRole getRole() { return role; }
-    public void setRole(StaffRole role) { this.role = role; }
+    public StaffRole getRole() {
+        return role;
+    }
+    public void setRole(StaffRole role) {
+        this.role = role;
+    }
 
-    public LocalDate getHireDate() { return hireDate; }
-    public void setHireDate(LocalDate hireDate) { this.hireDate = hireDate; }
+    public LocalDate getHireDate() {
+        return hireDate;
+    }
+    public void setHireDate(LocalDate hireDate) {
+        this.hireDate = hireDate;
+    }
 
-    public boolean isActive() { return active; }
-    public void setActive(boolean active) { this.active = active; }
+    public boolean isActive() {
+        return active;
+    }
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
     @Override
     public String toString() {
         return "Staff{id=" + id + ", firstName='" + firstName + "', lastName='" + lastName +
                 "', role=" + role + ", hireDate=" + hireDate + ", active=" + active + "}";
     }
+
 }
