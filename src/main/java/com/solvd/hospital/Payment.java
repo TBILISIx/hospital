@@ -6,6 +6,7 @@ import java.time.LocalDate;
 public class Payment {
 
     private Long id;
+    private Long admissionId;
     private LocalDate issuedDate;
     private BigDecimal totalAmount;
     private BigDecimal paidAmount;
@@ -21,8 +22,9 @@ public class Payment {
         this.paid = false;
     }
 
-    public Payment(Long id, LocalDate issuedDate, BigDecimal totalAmount, BigDecimal paidAmount, boolean paid) {
+    public Payment(Long id, Long admissionId, LocalDate issuedDate, BigDecimal totalAmount, BigDecimal paidAmount, boolean paid) {
         this.id = id;
+        this.admissionId = admissionId;
         this.issuedDate = issuedDate;
         this.totalAmount = totalAmount;
         this.paidAmount = paidAmount;
@@ -34,6 +36,13 @@ public class Payment {
     }
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getAdmissionId() {
+        return admissionId;
+    }
+    public void setAdmissionId(Long admissionId) {
+        this.admissionId = admissionId;
     }
 
     public LocalDate getIssuedDate() {
@@ -66,8 +75,9 @@ public class Payment {
 
     @Override
     public String toString() {
-        return "Payment{id=" + id + ", issuedDate=" + issuedDate +
-                ", totalAmount=" + totalAmount + ", paidAmount=" + paidAmount + ", paid=" + paid + "}";
+        return "Payment{id=" + id + ", admissionId=" + admissionId +
+                ", issuedDate=" + issuedDate + ", totalAmount=" + totalAmount +
+                ", paidAmount=" + paidAmount + ", paid=" + paid + "}";
     }
 
 }

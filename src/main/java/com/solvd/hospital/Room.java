@@ -11,6 +11,7 @@ public class Room {
     private RoomType type;
     private Long capacity;
     private boolean occupied;
+    private Long departmentId;
 
     public Room() {
     }
@@ -21,12 +22,13 @@ public class Room {
         this.capacity = capacity;
     }
 
-    public Room(Long id, String roomNumber, RoomType type, Long capacity, boolean occupied) {
+    public Room(Long id, String roomNumber, RoomType type, Long capacity, boolean occupied, Long departmentId) {
         this.id = id;
         this.roomNumber = roomNumber;
         this.type = type;
         this.capacity = capacity;
         this.occupied = occupied;
+        this.departmentId = departmentId;
     }
 
     public Long getId() {
@@ -64,10 +66,18 @@ public class Room {
         this.occupied = occupied;
     }
 
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
     @Override
     public String toString() {
         return "Room{id=" + id + ", roomNumber='" + roomNumber + "', type=" + type +
-                ", capacity=" + capacity + ", occupied=" + occupied + "}";
+                ", capacity=" + capacity + ", occupied=" + occupied +
+                ", departmentId=" + departmentId + "}";
     }
 
 }
