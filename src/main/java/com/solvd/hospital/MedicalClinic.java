@@ -5,11 +5,11 @@ import java.util.List;
 
 public class MedicalClinic {
 
-    private Integer id;
+    private Long id;
     private String name;
     private String address;
-    private Integer totalPatientRooms;
-    private Integer occupiedPatientRooms;
+    private Long totalPatientRooms;
+    private Long occupiedPatientRooms;
     private List<Department> departments = new ArrayList<>();
 
     public MedicalClinic() {
@@ -20,7 +20,7 @@ public class MedicalClinic {
         this.address = address;
     }
 
-    public MedicalClinic(Integer id, String name, String address, Integer totalPatientRooms, Integer occupiedPatientRooms, List<Department> departments) {
+    public MedicalClinic(Long id, String name, String address, Long totalPatientRooms, Long occupiedPatientRooms, List<Department> departments) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -29,8 +29,8 @@ public class MedicalClinic {
         this.departments = departments;
     }
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -38,11 +38,11 @@ public class MedicalClinic {
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
-    public Integer getTotalPatientRooms() { return totalPatientRooms; }
-    public void setTotalPatientRooms(Integer totalPatientRooms) { this.totalPatientRooms = totalPatientRooms; }
+    public Long getTotalPatientRooms() { return totalPatientRooms; }
+    public void setTotalPatientRooms(Long totalPatientRooms) { this.totalPatientRooms = totalPatientRooms; }
 
-    public Integer getOccupiedPatientRooms() { return occupiedPatientRooms; }
-    public void setOccupiedPatientRooms(Integer occupiedPatientRooms) { this.occupiedPatientRooms = occupiedPatientRooms; }
+    public Long getOccupiedPatientRooms() { return occupiedPatientRooms; }
+    public void setOccupiedPatientRooms(Long occupiedPatientRooms) { this.occupiedPatientRooms = occupiedPatientRooms; }
 
     public List<Department> getDepartments() { return departments; }
     public void setDepartments(List<Department> departments) { this.departments = departments; }

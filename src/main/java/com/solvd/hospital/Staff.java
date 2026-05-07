@@ -12,28 +12,25 @@ public class Staff {
     private String firstName;
     private String lastName;
     private StaffRole role;
-    private Department department;
     private LocalDate hireDate;
     private boolean active;
 
     public Staff() {
     }
 
-    public Staff(String firstName, String lastName, StaffRole role, Department department, LocalDate hireDate) {
+    public Staff(String firstName, String lastName, StaffRole role, LocalDate hireDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
-        this.department = department;
         this.hireDate = hireDate;
         this.active = true;
     }
 
-    public Staff(Integer id, String firstName, String lastName, StaffRole role, Department department, LocalDate hireDate, boolean active) {
+    public Staff(Integer id, String firstName, String lastName, StaffRole role, LocalDate hireDate, boolean active) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
-        this.department = department;
         this.hireDate = hireDate;
         this.active = active;
     }
@@ -50,9 +47,6 @@ public class Staff {
     public StaffRole getRole() { return role; }
     public void setRole(StaffRole role) { this.role = role; }
 
-    public Department getDepartment() { return department; }
-    public void setDepartment(Department department) { this.department = department; }
-
     public LocalDate getHireDate() { return hireDate; }
     public void setHireDate(LocalDate hireDate) { this.hireDate = hireDate; }
 
@@ -62,7 +56,6 @@ public class Staff {
     @Override
     public String toString() {
         return "Staff{id=" + id + ", firstName='" + firstName + "', lastName='" + lastName +
-                "', role=" + role + ", department=" + department +
-                ", hireDate=" + hireDate + ", active=" + active + "}";
+                "', role=" + role + ", hireDate=" + hireDate + ", active=" + active + "}";
     }
 }

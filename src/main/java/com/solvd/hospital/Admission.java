@@ -10,6 +10,7 @@ public class Admission {
     private LocalDateTime admittedAt;
     private LocalDateTime dischargedAt;
     private String reason;
+    private Payment payment;
 
     public Admission() {
     }
@@ -21,13 +22,14 @@ public class Admission {
         this.reason = reason;
     }
 
-    public Admission(Integer id, Patient patient, Room room, LocalDateTime admittedAt, LocalDateTime dischargedAt, String reason) {
+    public Admission(Integer id, Patient patient, Room room, LocalDateTime admittedAt, LocalDateTime dischargedAt, String reason, Payment payment) {
         this.id = id;
         this.patient = patient;
         this.room = room;
         this.admittedAt = admittedAt;
         this.dischargedAt = dischargedAt;
         this.reason = reason;
+        this.payment = payment;
     }
 
     public Integer getId() { return id; }
@@ -48,10 +50,13 @@ public class Admission {
     public String getReason() { return reason; }
     public void setReason(String reason) { this.reason = reason; }
 
+    public Payment getPayment() { return payment; }
+    public void setPayment(Payment payment) { this.payment = payment; }
+
     @Override
     public String toString() {
         return "Admission{id=" + id + ", patient=" + patient + ", room=" + room +
                 ", admittedAt=" + admittedAt + ", dischargedAt=" + dischargedAt +
-                ", reason='" + reason + "'}";
+                ", reason='" + reason + "', payment=" + payment + "}";
     }
 }

@@ -7,25 +7,22 @@ public class Doctor {
     private String lastName;
     private String specialization;
     private boolean available;
-    private Department department;
 
     public Doctor() {
     }
 
-    public Doctor(String firstName, String lastName, String specialization, Department department) {
+    public Doctor(String firstName, String lastName, String specialization) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.specialization = specialization;
-        this.department = department;
     }
 
-    public Doctor(Integer id, String firstName, String lastName, String specialization, boolean available, Department department) {
+    public Doctor(Integer id, String firstName, String lastName, String specialization, boolean available) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.specialization = specialization;
         this.available = available;
-        this.department = department;
     }
 
     public Integer getId() { return id; }
@@ -43,13 +40,9 @@ public class Doctor {
     public boolean isAvailable() { return available; }
     public void setAvailable(boolean available) { this.available = available; }
 
-    public Department getDepartment() { return department; }
-    public void setDepartment(Department department) { this.department = department; }
-
     @Override
     public String toString() {
         return "Doctor{id=" + id + ", firstName='" + firstName + "', lastName='" + lastName +
-                "', specialization='" + specialization + "', available=" + available +
-                ", department=" + department + "}";
+                "', specialization='" + specialization + "', available=" + available + "}";
     }
 }

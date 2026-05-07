@@ -11,25 +11,22 @@ public class Room {
     private RoomType type;
     private int capacity;
     private boolean occupied;
-    private Department department;
 
     public Room() {
     }
 
-    public Room(String roomNumber, RoomType type, int capacity, Department department) {
+    public Room(String roomNumber, RoomType type, int capacity) {
         this.roomNumber = roomNumber;
         this.type = type;
         this.capacity = capacity;
-        this.department = department;
     }
 
-    public Room(Integer id, String roomNumber, RoomType type, int capacity, boolean occupied, Department department) {
+    public Room(Integer id, String roomNumber, RoomType type, int capacity, boolean occupied) {
         this.id = id;
         this.roomNumber = roomNumber;
         this.type = type;
         this.capacity = capacity;
         this.occupied = occupied;
-        this.department = department;
     }
 
     public Integer getId() { return id; }
@@ -47,12 +44,9 @@ public class Room {
     public boolean isOccupied() { return occupied; }
     public void setOccupied(boolean occupied) { this.occupied = occupied; }
 
-    public Department getDepartment() { return department; }
-    public void setDepartment(Department department) { this.department = department; }
-
     @Override
     public String toString() {
         return "Room{id=" + id + ", roomNumber='" + roomNumber + "', type=" + type +
-                ", capacity=" + capacity + ", occupied=" + occupied + ", department=" + department + "}";
+                ", capacity=" + capacity + ", occupied=" + occupied + "}";
     }
 }

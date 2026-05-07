@@ -9,7 +9,6 @@ public class Appointment {
     }
 
     private Integer id;
-    private Patient patient;
     private Doctor doctor;
     private LocalDateTime scheduledAt;
     private AppointmentStatus status;
@@ -18,16 +17,14 @@ public class Appointment {
     public Appointment() {
     }
 
-    public Appointment(Patient patient, Doctor doctor, LocalDateTime scheduledAt) {
-        this.patient = patient;
+    public Appointment(Doctor doctor, LocalDateTime scheduledAt) {
         this.doctor = doctor;
         this.scheduledAt = scheduledAt;
         this.status = AppointmentStatus.SCHEDULED;
     }
 
-    public Appointment(Integer id, Patient patient, Doctor doctor, LocalDateTime scheduledAt, AppointmentStatus status, String notes) {
+    public Appointment(Integer id, Doctor doctor, LocalDateTime scheduledAt, AppointmentStatus status, String notes) {
         this.id = id;
-        this.patient = patient;
         this.doctor = doctor;
         this.scheduledAt = scheduledAt;
         this.status = status;
@@ -36,9 +33,6 @@ public class Appointment {
 
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
-
-    public Patient getPatient() { return patient; }
-    public void setPatient(Patient patient) { this.patient = patient; }
 
     public Doctor getDoctor() { return doctor; }
     public void setDoctor(Doctor doctor) { this.doctor = doctor; }
@@ -54,7 +48,7 @@ public class Appointment {
 
     @Override
     public String toString() {
-        return "Appointment{id=" + id + ", patient=" + patient + ", doctor=" + doctor +
+        return "Appointment{id=" + id + ", doctor=" + doctor +
                 ", scheduledAt=" + scheduledAt + ", status=" + status + ", notes='" + notes + "'}";
     }
 }

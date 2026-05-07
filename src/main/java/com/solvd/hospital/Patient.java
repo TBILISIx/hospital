@@ -1,6 +1,8 @@
 package com.solvd.hospital;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Patient {
 
@@ -10,6 +12,10 @@ public class Patient {
     private LocalDate dateOfBirth;
     private String phoneNumber;
     private boolean insured;
+    private MedicalRecord medicalRecord;
+    private List<Appointment> appointments = new ArrayList<>();
+    private List<Admission> admissions = new ArrayList<>();
+    private List<Prescription> prescriptions = new ArrayList<>();
 
     public Patient() {
     }
@@ -22,13 +28,18 @@ public class Patient {
         this.insured = insured;
     }
 
-    public Patient(Integer id, String firstName, String lastName, LocalDate dateOfBirth, String phoneNumber, boolean insured) {
+    public Patient(Integer id, String firstName, String lastName, LocalDate dateOfBirth, String phoneNumber, boolean insured,
+                   MedicalRecord medicalRecord, List<Appointment> appointments, List<Admission> admissions, List<Prescription> prescriptions) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
         this.insured = insured;
+        this.medicalRecord = medicalRecord;
+        this.appointments = appointments;
+        this.admissions = admissions;
+        this.prescriptions = prescriptions;
     }
 
     public Integer getId() { return id; }
@@ -48,6 +59,18 @@ public class Patient {
 
     public boolean isInsured() { return insured; }
     public void setInsured(boolean insured) { this.insured = insured; }
+
+    public MedicalRecord getMedicalRecord() { return medicalRecord; }
+    public void setMedicalRecord(MedicalRecord medicalRecord) { this.medicalRecord = medicalRecord; }
+
+    public List<Appointment> getAppointments() { return appointments; }
+    public void setAppointments(List<Appointment> appointments) { this.appointments = appointments; }
+
+    public List<Admission> getAdmissions() { return admissions; }
+    public void setAdmissions(List<Admission> admissions) { this.admissions = admissions; }
+
+    public List<Prescription> getPrescriptions() { return prescriptions; }
+    public void setPrescriptions(List<Prescription> prescriptions) { this.prescriptions = prescriptions; }
 
     @Override
     public String toString() {

@@ -9,7 +9,6 @@ import java.util.List;
 public class MedicalRecord {
 
     private Integer id;
-    private Patient patient;
     private LocalDate createdDate;
     private BloodType bloodType;
     private List<Allergy> allergies = new ArrayList<>();
@@ -18,15 +17,13 @@ public class MedicalRecord {
     public MedicalRecord() {
     }
 
-    public MedicalRecord(Patient patient, LocalDate createdDate, BloodType bloodType) {
-        this.patient = patient;
+    public MedicalRecord(LocalDate createdDate, BloodType bloodType) {
         this.createdDate = createdDate;
         this.bloodType = bloodType;
     }
 
-    public MedicalRecord(Integer id, Patient patient, LocalDate createdDate, BloodType bloodType, List<Allergy> allergies, String notes) {
+    public MedicalRecord(Integer id, LocalDate createdDate, BloodType bloodType, List<Allergy> allergies, String notes) {
         this.id = id;
-        this.patient = patient;
         this.createdDate = createdDate;
         this.bloodType = bloodType;
         this.allergies = allergies;
@@ -35,9 +32,6 @@ public class MedicalRecord {
 
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
-
-    public Patient getPatient() { return patient; }
-    public void setPatient(Patient patient) { this.patient = patient; }
 
     public LocalDate getCreatedDate() { return createdDate; }
     public void setCreatedDate(LocalDate createdDate) { this.createdDate = createdDate; }
@@ -53,7 +47,7 @@ public class MedicalRecord {
 
     @Override
     public String toString() {
-        return "MedicalRecord{id=" + id + ", patient=" + patient + ", createdDate=" + createdDate +
+        return "MedicalRecord{id=" + id + ", createdDate=" + createdDate +
                 ", bloodType=" + bloodType + ", allergies=" + allergies + ", notes='" + notes + "'}";
     }
 }
