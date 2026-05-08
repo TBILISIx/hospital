@@ -1,5 +1,7 @@
 package com.solvd.hospital;
 
+import java.util.List;
+
 public class Room {
 
     public enum RoomType {
@@ -11,29 +13,21 @@ public class Room {
     private RoomType type;
     private Long capacity;
     private boolean occupied;
-    private Long departmentId;
+    private List<Admission> admissions;
 
-    public Room() {
-    }
-
-    public Room(String roomNumber, RoomType type, Long capacity) {
-        this.roomNumber = roomNumber;
-        this.type = type;
-        this.capacity = capacity;
-    }
-
-    public Room(Long id, String roomNumber, RoomType type, Long capacity, boolean occupied, Long departmentId) {
+    public Room(Long id, String roomNumber, RoomType type, Long capacity, boolean occupied, List<Admission> admissions) {
         this.id = id;
         this.roomNumber = roomNumber;
         this.type = type;
         this.capacity = capacity;
         this.occupied = occupied;
-        this.departmentId = departmentId;
+        this.admissions = admissions;
     }
 
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -41,6 +35,7 @@ public class Room {
     public String getRoomNumber() {
         return roomNumber;
     }
+
     public void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;
     }
@@ -48,6 +43,7 @@ public class Room {
     public RoomType getType() {
         return type;
     }
+
     public void setType(RoomType type) {
         this.type = type;
     }
@@ -55,6 +51,7 @@ public class Room {
     public Long getCapacity() {
         return capacity;
     }
+
     public void setCapacity(Long capacity) {
         this.capacity = capacity;
     }
@@ -62,22 +59,29 @@ public class Room {
     public boolean isOccupied() {
         return occupied;
     }
+
     public void setOccupied(boolean occupied) {
         this.occupied = occupied;
     }
 
-    public Long getDepartmentId() {
-        return departmentId;
+    public List<Admission> getAdmissions() {
+        return admissions;
     }
-    public void setDepartmentId(Long departmentId) {
-        this.departmentId = departmentId;
+
+    public void setAdmissions(List<Admission> admissions) {
+        this.admissions = admissions;
     }
 
     @Override
     public String toString() {
-        return "Room{id=" + id + ", roomNumber='" + roomNumber + "', type=" + type +
-                ", capacity=" + capacity + ", occupied=" + occupied +
-                ", departmentId=" + departmentId + "}";
+        return "Room{" +
+                "id=" + id +
+                ", roomNumber='" + roomNumber + '\'' +
+                ", type=" + type +
+                ", capacity=" + capacity +
+                ", occupied=" + occupied +
+                ", admissions=" + admissions +
+                '}';
     }
 
 }

@@ -10,7 +10,7 @@ public class MedicalClinic {
     private String address;
     private Long totalPatientRooms;
     private Long occupiedPatientRooms;
-    private List<Department> departments = new ArrayList<>();
+    private List<Department> departments;
 
     public MedicalClinic() {
     }

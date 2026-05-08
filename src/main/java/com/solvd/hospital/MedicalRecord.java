@@ -9,23 +9,13 @@ import java.util.List;
 public class MedicalRecord {
 
     private Long id;
-    private Long patientId;
     private LocalDate createdDate;
     private BloodType bloodType;
-    private List<Allergy> allergies = new ArrayList<>();
+    private List<Allergy> allergies;
     private String notes;
 
-    public MedicalRecord() {
-    }
-
-    public MedicalRecord(LocalDate createdDate, BloodType bloodType) {
-        this.createdDate = createdDate;
-        this.bloodType = bloodType;
-    }
-
-    public MedicalRecord(Long id, Long patientId, LocalDate createdDate, BloodType bloodType, List<Allergy> allergies, String notes) {
+    public MedicalRecord(Long id, LocalDate createdDate, BloodType bloodType, List<Allergy> allergies, String notes) {
         this.id = id;
-        this.patientId = patientId;
         this.createdDate = createdDate;
         this.bloodType = bloodType;
         this.allergies = allergies;
@@ -35,20 +25,15 @@ public class MedicalRecord {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getPatientId() {
-        return patientId;
-    }
-    public void setPatientId(Long patientId) {
-        this.patientId = patientId;
     }
 
     public LocalDate getCreatedDate() {
         return createdDate;
     }
+
     public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
     }
@@ -56,6 +41,7 @@ public class MedicalRecord {
     public BloodType getBloodType() {
         return bloodType;
     }
+
     public void setBloodType(BloodType bloodType) {
         this.bloodType = bloodType;
     }
@@ -63,6 +49,7 @@ public class MedicalRecord {
     public List<Allergy> getAllergies() {
         return allergies;
     }
+
     public void setAllergies(List<Allergy> allergies) {
         this.allergies = allergies;
     }
@@ -70,13 +57,14 @@ public class MedicalRecord {
     public String getNotes() {
         return notes;
     }
+
     public void setNotes(String notes) {
         this.notes = notes;
     }
 
     @Override
     public String toString() {
-        return "MedicalRecord{id=" + id + ", patientId=" + patientId +
+        return "MedicalRecord{id=" + id +
                 ", createdDate=" + createdDate + ", bloodType=" + bloodType +
                 ", allergies=" + allergies + ", notes='" + notes + "'}";
     }
