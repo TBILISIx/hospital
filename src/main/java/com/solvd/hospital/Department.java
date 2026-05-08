@@ -1,6 +1,5 @@
 package com.solvd.hospital;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Department {
@@ -8,17 +7,9 @@ public class Department {
     private Long id;
     private String name;
     private String location;
-    private List<Doctor> doctors = new ArrayList<>();
-    private List<Staff> staff = new ArrayList<>();
-    private List<Room> rooms = new ArrayList<>();
-
-    public Department() {
-    }
-
-    public Department(String name, String location) {
-        this.name = name;
-        this.location = location;
-    }
+    private List<Doctor> doctors;
+    private List<Staff> staff;
+    private List<Room> rooms;
 
     public Department(Long id, String name, String location, List<Doctor> doctors, List<Staff> staff, List<Room> rooms) {
         this.id = id;
@@ -32,6 +23,7 @@ public class Department {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -39,6 +31,7 @@ public class Department {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -46,6 +39,7 @@ public class Department {
     public String getLocation() {
         return location;
     }
+
     public void setLocation(String location) {
         this.location = location;
     }
@@ -53,6 +47,7 @@ public class Department {
     public List<Doctor> getDoctors() {
         return doctors;
     }
+
     public void setDoctors(List<Doctor> doctors) {
         this.doctors = doctors;
     }
@@ -60,6 +55,7 @@ public class Department {
     public List<Staff> getStaff() {
         return staff;
     }
+
     public void setStaff(List<Staff> staff) {
         this.staff = staff;
     }
@@ -67,6 +63,7 @@ public class Department {
     public List<Room> getRooms() {
         return rooms;
     }
+
     public void setRooms(List<Room> rooms) {
         this.rooms = rooms;
     }
