@@ -93,9 +93,16 @@ WHERE  paid = 0
   AND  id = 2;
 
 -- 6. Delete all admissions that were discharged more than a year ago
+DELETE FROM payments
+WHERE admissions_id IN (
+    SELECT id FROM admissions
+    WHERE discharged_at IS NOT NULL
+      AND discharged_at < NOW() - INTERVAL 1 YEAR
+);
+
 DELETE FROM admissions
-WHERE  discharged_at IS NOT NULL
-  AND  discharged_at < NOW() - INTERVAL 1 YEAR;
+WHERE discharged_at IS NOT NULL
+  AND discharged_at < NOW() - INTERVAL 1 YEAR;
 
 -- 7. Remove an inactive staff member record
 DELETE FROM staff
