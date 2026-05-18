@@ -1,4 +1,4 @@
-package com.solvd.hospital;
+package com.solvd.hospital.model;
 
 import java.time.LocalDate;
 
@@ -71,7 +71,6 @@ public class Staff {
     public void setActive(boolean active) {
         this.active = active;
     }
-
 
     @Override
     public String toString() {

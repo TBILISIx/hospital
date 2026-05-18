@@ -1,4 +1,4 @@
-package com.solvd.hospital;
+package com.solvd.hospital.model;
 
 import java.time.LocalDateTime;
 
@@ -34,14 +34,15 @@ public class Appointment {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
 
-
     public Doctor getDoctor() {
         return doctor;
     }
+
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
     }
@@ -49,6 +50,7 @@ public class Appointment {
     public LocalDateTime getScheduledAt() {
         return scheduledAt;
     }
+
     public void setScheduledAt(LocalDateTime scheduledAt) {
         this.scheduledAt = scheduledAt;
     }
@@ -56,6 +58,7 @@ public class Appointment {
     public AppointmentStatus getStatus() {
         return status;
     }
+
     public void setStatus(AppointmentStatus status) {
         this.status = status;
     }
@@ -63,6 +66,7 @@ public class Appointment {
     public String getNotes() {
         return notes;
     }
+
     public void setNotes(String notes) {
         this.notes = notes;
     }
