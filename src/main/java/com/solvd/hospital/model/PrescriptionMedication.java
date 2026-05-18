@@ -1,4 +1,4 @@
-package com.solvd.hospital;
+package com.solvd.hospital.model;
 
 public class PrescriptionMedication {
 
@@ -26,6 +26,7 @@ public class PrescriptionMedication {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -33,6 +34,7 @@ public class PrescriptionMedication {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -40,6 +42,7 @@ public class PrescriptionMedication {
     public String getDosage() {
         return dosage;
     }
+
     public void setDosage(String dosage) {
         this.dosage = dosage;
     }
@@ -47,6 +50,7 @@ public class PrescriptionMedication {
     public String getFrequency() {
         return frequency;
     }
+
     public void setFrequency(String frequency) {
         this.frequency = frequency;
     }

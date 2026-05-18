@@ -1,6 +1,5 @@
-package com.solvd.hospital;
+package com.solvd.hospital.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MedicalClinic {
@@ -32,6 +31,7 @@ public class MedicalClinic {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -39,6 +39,7 @@ public class MedicalClinic {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -46,6 +47,7 @@ public class MedicalClinic {
     public String getAddress() {
         return address;
     }
+
     public void setAddress(String address) {
         this.address = address;
     }
@@ -53,6 +55,7 @@ public class MedicalClinic {
     public Long getTotalPatientRooms() {
         return totalPatientRooms;
     }
+
     public void setTotalPatientRooms(Long totalPatientRooms) {
         this.totalPatientRooms = totalPatientRooms;
     }
@@ -60,6 +63,7 @@ public class MedicalClinic {
     public Long getOccupiedPatientRooms() {
         return occupiedPatientRooms;
     }
+
     public void setOccupiedPatientRooms(Long occupiedPatientRooms) {
         this.occupiedPatientRooms = occupiedPatientRooms;
     }
@@ -67,6 +71,7 @@ public class MedicalClinic {
     public List<Department> getDepartments() {
         return departments;
     }
+
     public void setDepartments(List<Department> departments) {
         this.departments = departments;
     }

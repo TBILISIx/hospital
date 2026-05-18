@@ -1,9 +1,8 @@
-package com.solvd.hospital;
+package com.solvd.hospital.model;
 
 import com.solvd.hospital.enums.BloodType;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MedicalRecord {

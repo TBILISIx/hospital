@@ -1,12 +1,12 @@
-import com.solvd.hospital.*;
-import com.solvd.hospital.enums.BloodType;
+import com.solvd.hospital.dao.impl.*;
+import com.solvd.hospital.db.ConnectionPool;
+import com.solvd.hospital.service.*;
+import com.solvd.hospital.service.impl.*;
+import com.solvd.hospital.dao.impl.PatientAdmissionReport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import javax.sql.DataSource;
 import java.util.List;
 
 public class Main {
@@ -15,6 +15,66 @@ public class Main {
 
     public static void main(String[] args) {
 
-    }
+        // 1. One shared DataSource from the pool
+        DataSource dataSource = ConnectionPool.getInstance().getDataSource();
 
+        // 2. Build DAOs
+        PatientDaoImpl patientDao = new PatientDaoImpl(dataSource);
+        DoctorDaoImpl doctorDao = new DoctorDaoImpl(dataSource);
+        AppointmentDaoImpl appointmentDao = new AppointmentDaoImpl(dataSource);
+        AdmissionDaoImpl admissionDao = new AdmissionDaoImpl(dataSource);
+        PrescriptionDaoImpl prescriptionDao = new PrescriptionDaoImpl(dataSource);
+        MedicalRecordDaoImpl medicalRecordDao = new MedicalRecordDaoImpl(dataSource);
+        PaymentDaoImpl paymentDao = new PaymentDaoImpl(dataSource);
+        ReportDaoImpl reportDao = new ReportDaoImpl(dataSource);
+
+        // 3. Build Services (inject DAOs)
+        PatientService patientService = new PatientServiceImpl(patientDao);
+        DoctorService doctorService = new DoctorServiceImpl(doctorDao);
+        AppointmentService appointmentService = new AppointmentServiceImpl(appointmentDao, doctorDao);
+        AdmissionService admissionService = new AdmissionServiceImpl(admissionDao);
+        PrescriptionService prescriptionService = new PrescriptionServiceImpl(prescriptionDao);
+        PaymentService paymentService = new PaymentServiceImpl(paymentDao);
+        ReportService reportService = new ReportServiceImpl(reportDao);
+
+        // 4. Use services – Main never touches a DAO directly
+
+        LOGGER.info("--- All patients ---");
+        patientService.getAllPatients()
+                .forEach(p -> LOGGER.info("{} {}", p.getFirstName(), p.getLastName()));
+
+        LOGGER.info("--- Available doctors ---");
+        doctorService.getAvailableDoctors()
+                .forEach(d -> LOGGER.info(
+                        "{} {} – {}",
+                        d.getFirstName(),
+                        d.getLastName(),
+                        d.getSpecialization()
+                ));
+
+        LOGGER.info("--- Active admissions ---");
+        admissionService.getActiveAdmissions()
+                .forEach(a -> LOGGER.info(
+                        "Admission id={} reason={}",
+                        a.getId(),
+                        a.getReason()
+                ));
+
+        LOGGER.info("--- Unpaid payments ---");
+        paymentService.getUnpaidPayments()
+                .forEach(pay -> LOGGER.info(
+                        "Payment id={} total={} paid={}",
+                        pay.getId(),
+                        pay.getTotalAmount(),
+                        pay.getPaidAmount()
+                ));
+
+        LOGGER.info("--- Full report (5-join query) ---");
+        List<PatientAdmissionReport> report = reportService.getPatientAdmissionReport();
+        report.forEach(row -> LOGGER.info(row.toString()));
+
+        // 5. Shut down pool cleanly
+        ConnectionPool.getInstance().close();
+    }
 }
+

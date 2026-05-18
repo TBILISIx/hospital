@@ -1,4 +1,4 @@
-package com.solvd.hospital;
+package com.solvd.hospital.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -34,6 +34,7 @@ public class Payment {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -41,6 +42,7 @@ public class Payment {
     public Long getAdmissionId() {
         return admissionId;
     }
+
     public void setAdmissionId(Long admissionId) {
         this.admissionId = admissionId;
     }
@@ -48,6 +50,7 @@ public class Payment {
     public LocalDate getIssuedDate() {
         return issuedDate;
     }
+
     public void setIssuedDate(LocalDate issuedDate) {
         this.issuedDate = issuedDate;
     }
@@ -55,6 +58,7 @@ public class Payment {
     public BigDecimal getTotalAmount() {
         return totalAmount;
     }
+
     public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
@@ -62,6 +66,7 @@ public class Payment {
     public BigDecimal getPaidAmount() {
         return paidAmount;
     }
+
     public void setPaidAmount(BigDecimal paidAmount) {
         this.paidAmount = paidAmount;
     }
@@ -69,6 +74,7 @@ public class Payment {
     public boolean isPaid() {
         return paid;
     }
+
     public void setPaid(boolean paid) {
         this.paid = paid;
     }
