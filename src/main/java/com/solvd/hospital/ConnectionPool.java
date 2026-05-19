@@ -1,6 +1,6 @@
-package com.solvd.hospital.db;
+package com.solvd.hospital;
 
-import com.solvd.hospital.enums.Config;
+import com.solvd.hospital.model.Config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

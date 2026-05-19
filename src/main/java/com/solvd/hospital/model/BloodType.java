@@ -1,4 +1,4 @@
-package com.solvd.hospital.enums;
+package com.solvd.hospital.model;
 
 public enum BloodType {
     A_POSITIVE,

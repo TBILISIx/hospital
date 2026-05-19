@@ -2,7 +2,7 @@ package com.solvd.hospital.dao.impl;
 
 import com.solvd.hospital.dao.AbstractDao;
 import com.solvd.hospital.dao.MedicalRecordDao;
-import com.solvd.hospital.enums.BloodType;
+import com.solvd.hospital.model.BloodType;
 import com.solvd.hospital.model.MedicalRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,21 +17,25 @@ public class MedicalRecordDaoImpl extends AbstractDao implements MedicalRecordDa
     @Override
     public void create(MedicalRecord record, Long patientId) {
 
-        String sql = "INSERT INTO medical_records (created_date, blood_type, notes, patients_id) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO medical_records " +
+                "(created_date, blood_type, notes, patients_id) VALUES (?, ?, ?, ?)";
 
         Connection connection = getConnection();
 
         try (
-                PreparedStatement preparedStatement = connection.prepareStatement(
-                        sql,
-                        Statement.RETURN_GENERATED_KEYS
-                )
+                PreparedStatement preparedStatement =
+                        connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
 
             preparedStatement.setDate(1, Date.valueOf(record.getCreatedDate()));
-            preparedStatement.setString(2, record.getBloodType() != null
-                    ? record.getBloodType().name()
-                    : null);
+
+            preparedStatement.setString(
+                    2,
+                    record.getBloodType() != null
+                            ? record.getBloodType().name()
+                            : null
+            );
+
             preparedStatement.setString(3, record.getNotes());
             preparedStatement.setLong(4, patientId);
 
@@ -46,6 +50,7 @@ public class MedicalRecordDaoImpl extends AbstractDao implements MedicalRecordDa
             LOGGER.info("Created medical record id={}", record.getId());
 
         } catch (SQLException e) {
+
             LOGGER.error("Failed to create medical record", e);
             throw new RuntimeException(e);
 
@@ -57,7 +62,8 @@ public class MedicalRecordDaoImpl extends AbstractDao implements MedicalRecordDa
     @Override
     public void update(MedicalRecord record) {
 
-        String sql = "UPDATE medical_records SET created_date=?, blood_type=?, notes=? WHERE id=?";
+        String sql =
+                "UPDATE medical_records SET created_date=?, blood_type=?, notes=? WHERE id=?";
 
         Connection connection = getConnection();
 
@@ -66,9 +72,12 @@ public class MedicalRecordDaoImpl extends AbstractDao implements MedicalRecordDa
         ) {
 
             preparedStatement.setDate(1, Date.valueOf(record.getCreatedDate()));
-            preparedStatement.setString(2, record.getBloodType() != null
-                    ? record.getBloodType().name()
-                    : null);
+
+            preparedStatement.setString(
+                    2,
+                    record.getBloodType() != null ? record.getBloodType().name() : null
+            );
+
             preparedStatement.setString(3, record.getNotes());
             preparedStatement.setLong(4, record.getId());
 
@@ -77,6 +86,7 @@ public class MedicalRecordDaoImpl extends AbstractDao implements MedicalRecordDa
             LOGGER.info("Updated medical record id={}", record.getId());
 
         } catch (SQLException e) {
+
             LOGGER.error("Failed to update medical record", e);
             throw new RuntimeException(e);
 
@@ -103,6 +113,7 @@ public class MedicalRecordDaoImpl extends AbstractDao implements MedicalRecordDa
             LOGGER.info("Deleted medical record id={}", id);
 
         } catch (SQLException e) {
+
             LOGGER.error("Failed to delete medical record id={}", id, e);
             throw new RuntimeException(e);
 
@@ -131,6 +142,7 @@ public class MedicalRecordDaoImpl extends AbstractDao implements MedicalRecordDa
             }
 
         } catch (SQLException e) {
+
             LOGGER.error("Failed to find medical record id={}", id, e);
             throw new RuntimeException(e);
 
@@ -161,6 +173,7 @@ public class MedicalRecordDaoImpl extends AbstractDao implements MedicalRecordDa
             }
 
         } catch (SQLException e) {
+
             LOGGER.error("Failed to find medical record for patient id={}", patientId, e);
             throw new RuntimeException(e);
 
@@ -183,4 +196,5 @@ public class MedicalRecordDaoImpl extends AbstractDao implements MedicalRecordDa
                 result.getString("notes")
         );
     }
+
 }

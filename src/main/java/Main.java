@@ -1,12 +1,11 @@
 import com.solvd.hospital.dao.impl.*;
-import com.solvd.hospital.db.ConnectionPool;
+import com.solvd.hospital.ConnectionPool;
+import com.solvd.hospital.model.Patient;
 import com.solvd.hospital.service.*;
 import com.solvd.hospital.service.impl.*;
-import com.solvd.hospital.dao.impl.PatientAdmissionReport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 public class Main {
@@ -15,9 +14,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-
-
-        // 1. building DAOs
+        // build DAOs
         PatientDaoImpl patientDao = new PatientDaoImpl();
         DoctorDaoImpl doctorDao = new DoctorDaoImpl();
         AppointmentDaoImpl appointmentDao = new AppointmentDaoImpl();
@@ -27,31 +24,43 @@ public class Main {
         PaymentDaoImpl paymentDao = new PaymentDaoImpl();
         ReportDaoImpl reportDao = new ReportDaoImpl();
 
-        // 2. building services  (injecting DAOs)
+        // build services
         PatientService patientService = new PatientServiceImpl(patientDao);
         DoctorService doctorService = new DoctorServiceImpl(doctorDao);
-        AppointmentService appointmentService = new AppointmentServiceImpl(appointmentDao, doctorDao);
-        AdmissionService admissionService = new AdmissionServiceImpl(admissionDao);
-        PrescriptionService prescriptionService = new PrescriptionServiceImpl(prescriptionDao);
-        PaymentService paymentService = new PaymentServiceImpl(paymentDao);
-        ReportService reportService = new ReportServiceImpl(reportDao);
+        PrescriptionService prescriptionService =
+                new PrescriptionServiceImpl(prescriptionDao);
 
-        // 3. using services 
+        AdmissionService admissionService =
+                new AdmissionServiceImpl(admissionDao);
+
+        PaymentService paymentService =
+                new PaymentServiceImpl(paymentDao);
+
+        ReportService reportService =
+                new ReportServiceImpl(reportDao);
+
+        AppointmentService appointmentService =
+                new AppointmentServiceImpl(appointmentDao, doctorService);
 
         LOGGER.info("--- All patients ---");
+
         patientService.getAllPatients()
-                .forEach(p -> LOGGER.info("{} {}", p.getFirstName(), p.getLastName()));
+                .forEach(p ->
+                        LOGGER.info("{} {}", p.getFirstName(), p.getLastName())
+                );
 
         LOGGER.info("--- Available doctors ---");
+
         doctorService.getAvailableDoctors()
                 .forEach(d -> LOGGER.info(
-                        "{} {} – {}",
+                        "{} {} - {}",
                         d.getFirstName(),
                         d.getLastName(),
                         d.getSpecialization()
                 ));
 
         LOGGER.info("--- Active admissions ---");
+
         admissionService.getActiveAdmissions()
                 .forEach(a -> LOGGER.info(
                         "Admission id={} reason={}",
@@ -60,6 +69,7 @@ public class Main {
                 ));
 
         LOGGER.info("--- Unpaid payments ---");
+
         paymentService.getUnpaidPayments()
                 .forEach(pay -> LOGGER.info(
                         "Payment id={} total={} paid={}",
@@ -68,12 +78,62 @@ public class Main {
                         pay.getPaidAmount()
                 ));
 
-        LOGGER.info("--- Full report (5-join query) ---");
-        List<PatientAdmissionReport> report = reportService.getPatientAdmissionReport();
-        report.forEach(row -> LOGGER.info(row.toString()));
+        LOGGER.info("--- Full report (nested Patient objects) ---");
 
-        // 5. Shut down pool cleanly
+        List<Patient> report = reportService.getPatientAdmissionReport();
+
+        report.forEach(patient -> {
+
+            LOGGER.info(
+                    "Patient: {} {} | insured={}",
+                    patient.getFirstName(),
+                    patient.getLastName(),
+                    patient.isInsured()
+            );
+
+            if (patient.getMedicalRecord() != null) {
+
+                LOGGER.info(
+                        "  MedicalRecord: bloodType={} notes={}",
+                        patient.getMedicalRecord().getBloodType(),
+                        patient.getMedicalRecord().getNotes()
+                );
+
+                if (patient.getMedicalRecord().getAllergies() != null) {
+
+                    patient.getMedicalRecord()
+                            .getAllergies()
+                            .forEach(a ->
+                                    LOGGER.info("    Allergy: {}", a.getName())
+                            );
+                }
+            }
+
+            if (patient.getAdmission() != null) {
+
+                LOGGER.info(
+                        "  Admission: id={} reason={} admitted={} discharged={}",
+                        patient.getAdmission().getId(),
+                        patient.getAdmission().getReason(),
+                        patient.getAdmission().getAdmittedAt(),
+                        patient.getAdmission().getDischargedAt() != null
+                                ? patient.getAdmission().getDischargedAt()
+                                : "still admitted"
+                );
+
+                if (patient.getAdmission().getPayment() != null) {
+
+                    LOGGER.info(
+                            "    Payment: total={} paid={} settled={}",
+                            patient.getAdmission().getPayment().getTotalAmount(),
+                            patient.getAdmission().getPayment().getPaidAmount(),
+                            patient.getAdmission().getPayment().isPaid()
+                    );
+                }
+            }
+        });
+
+        // close connection pool
         ConnectionPool.getInstance().close();
     }
 }
-

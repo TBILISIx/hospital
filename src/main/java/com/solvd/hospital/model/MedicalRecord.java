@@ -1,7 +1,5 @@
 package com.solvd.hospital.model;
 
-import com.solvd.hospital.enums.BloodType;
-
 import java.time.LocalDate;
 import java.util.List;
 
