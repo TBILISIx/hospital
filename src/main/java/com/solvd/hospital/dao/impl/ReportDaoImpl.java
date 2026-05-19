@@ -17,11 +17,6 @@ public class ReportDaoImpl extends AbstractDao implements ReportDao {
     private static final Logger LOGGER =
             LogManager.getLogger(ReportDaoImpl.class);
 
-    /*
-     * this query will join patients to medical_records to allergies to admissions and to payments
-     * One patient row is repeated for every allergy they have,rows are grouped by patient id and allergies are added
-     * into the same medical record.
-     */
 
     @Override
     public List<Patient> findPatientsWithAdmissionDetails() {
