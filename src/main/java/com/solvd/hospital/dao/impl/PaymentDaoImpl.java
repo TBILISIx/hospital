@@ -1,33 +1,28 @@
 package com.solvd.hospital.dao.impl;
 
+import com.solvd.hospital.dao.AbstractDao;
 import com.solvd.hospital.dao.PaymentDao;
 import com.solvd.hospital.model.Payment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class PaymentDaoImpl implements PaymentDao {
+public class PaymentDaoImpl extends AbstractDao implements PaymentDao {
 
     private static final Logger LOGGER = LogManager.getLogger(PaymentDaoImpl.class);
-
-    private final DataSource dataSource;
-
-    public PaymentDaoImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Override
     public void create(Payment payment) {
 
         String sql = "INSERT INTO payments (issued_date, total_amount, paid_amount, paid, admissions_id) VALUES (?, ?, ?, ?, ?)";
 
+        Connection connection = getConnection();
+
         try (
-                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
                         sql,
                         Statement.RETURN_GENERATED_KEYS
@@ -53,6 +48,9 @@ public class PaymentDaoImpl implements PaymentDao {
         } catch (SQLException e) {
             LOGGER.error("Failed to create payment", e);
             throw new RuntimeException(e);
+
+        } finally {
+            releaseConnection(connection);
         }
     }
 
@@ -61,8 +59,9 @@ public class PaymentDaoImpl implements PaymentDao {
 
         String sql = "UPDATE payments SET issued_date=?, total_amount=?, paid_amount=?, paid=? WHERE id=?";
 
+        Connection connection = getConnection();
+
         try (
-                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
@@ -79,6 +78,9 @@ public class PaymentDaoImpl implements PaymentDao {
         } catch (SQLException e) {
             LOGGER.error("Failed to update payment", e);
             throw new RuntimeException(e);
+
+        } finally {
+            releaseConnection(connection);
         }
     }
 
@@ -87,8 +89,9 @@ public class PaymentDaoImpl implements PaymentDao {
 
         String sql = "DELETE FROM payments WHERE id=?";
 
+        Connection connection = getConnection();
+
         try (
-                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
@@ -101,6 +104,9 @@ public class PaymentDaoImpl implements PaymentDao {
         } catch (SQLException e) {
             LOGGER.error("Failed to delete payment id={}", id, e);
             throw new RuntimeException(e);
+
+        } finally {
+            releaseConnection(connection);
         }
     }
 
@@ -109,8 +115,9 @@ public class PaymentDaoImpl implements PaymentDao {
 
         String sql = "SELECT * FROM payments WHERE id=?";
 
+        Connection connection = getConnection();
+
         try (
-                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
@@ -125,6 +132,9 @@ public class PaymentDaoImpl implements PaymentDao {
         } catch (SQLException e) {
             LOGGER.error("Failed to find payment id={}", id, e);
             throw new RuntimeException(e);
+
+        } finally {
+            releaseConnection(connection);
         }
 
         return Optional.empty();
@@ -135,8 +145,9 @@ public class PaymentDaoImpl implements PaymentDao {
 
         String sql = "SELECT * FROM payments WHERE admissions_id=?";
 
+        Connection connection = getConnection();
+
         try (
-                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
@@ -151,6 +162,9 @@ public class PaymentDaoImpl implements PaymentDao {
         } catch (SQLException e) {
             LOGGER.error("Failed to find payment for admission id={}", admissionId, e);
             throw new RuntimeException(e);
+
+        } finally {
+            releaseConnection(connection);
         }
 
         return Optional.empty();
@@ -163,8 +177,9 @@ public class PaymentDaoImpl implements PaymentDao {
 
         List<Payment> list = new ArrayList<>();
 
+        Connection connection = getConnection();
+
         try (
-                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
                 ResultSet result = preparedStatement.executeQuery()
         ) {
@@ -176,6 +191,9 @@ public class PaymentDaoImpl implements PaymentDao {
         } catch (SQLException e) {
             LOGGER.error("Failed to find unpaid payments", e);
             throw new RuntimeException(e);
+
+        } finally {
+            releaseConnection(connection);
         }
 
         return list;

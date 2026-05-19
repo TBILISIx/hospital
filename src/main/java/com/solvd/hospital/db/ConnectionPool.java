@@ -1,80 +1,90 @@
 package com.solvd.hospital.db;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import com.solvd.hospital.enums.Config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.sql.DataSource;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
 
 public class ConnectionPool {
 
     private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
 
-    private static volatile ConnectionPool instance;
-    private final HikariDataSource dataSource;
+    private static ConnectionPool instance;
+
+    private final List<Connection> connections;
 
     private ConnectionPool() {
-
-        Properties properties = new Properties();
-
-        try (
-                InputStream input = ConnectionPool.class
-                        .getClassLoader()
-                        .getResourceAsStream("config.properties")
-        ) {
-
-            if (input == null) {
-                throw new RuntimeException("config.properties not found on classpath");
-            }
-
-            properties.load(input);
-
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load config.properties", e);
+        try {
+            Class.forName(Config.DRIVER.getValue());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Unable to find Driver class.", e);
         }
 
-        HikariConfig config = new HikariConfig();
+        int poolSize = Integer.parseInt(Config.POOL_SIZE.getValue());
+        this.connections = new ArrayList<>(poolSize);
 
-        config.setDriverClassName(properties.getProperty("db.driver"));
-        config.setJdbcUrl(properties.getProperty("db.url"));
-        config.setUsername(properties.getProperty("db.username"));
-        config.setPassword(properties.getProperty("db.password"));
+        IntStream.range(0, poolSize)
+                .boxed()
+                .forEach(index -> connections.add(createConnection()));
 
-        config.setMaximumPoolSize(Integer.parseInt(properties.getProperty("db.pool.size", "10")));
-        config.setConnectionTimeout(30_000);
-        config.setPoolName("HospitalPool");
-
-        this.dataSource = new HikariDataSource(config);
-
-        LOGGER.info("Connection pool initialised (max size={})", config.getMaximumPoolSize());
+        LOGGER.info("Connection pool initialized with {} connections", poolSize);
     }
 
-    public static ConnectionPool getInstance() {
-
+    public static synchronized ConnectionPool getInstance() {
         if (instance == null) {
-            synchronized (ConnectionPool.class) {
-                if (instance == null) {
-                    instance = new ConnectionPool();
-                }
-            }
+            instance = new ConnectionPool();
         }
-
         return instance;
     }
 
-    public DataSource getDataSource() {
-        return dataSource;
+    public synchronized Connection getConnection() {
+        for (Connection connection : connections) {
+            try {
+                if (connection.getAutoCommit()) {
+                    return connection;
+                }
+            } catch (SQLException e) {
+                LOGGER.error("Error checking connection state", e);
+            }
+        }
+        throw new RuntimeException("No free connections available");
+    }
+
+    public synchronized void releaseConnection(Connection connection) {
+        try {
+            connection.setAutoCommit(true);
+        } catch (SQLException e) {
+            LOGGER.error("Failed to release connection", e);
+        }
+    }
+
+    private Connection createConnection() {
+        try {
+            return DriverManager.getConnection(
+                    Config.URL.getValue(),
+                    Config.USERNAME.getValue(),
+                    Config.PASSWORD.getValue()
+            );
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to create connection", e);
+        }
     }
 
     public void close() {
-
-        if (dataSource != null && !dataSource.isClosed()) {
-            dataSource.close();
-            LOGGER.info("Connection pool closed");
-        }
+        connections.forEach(conn -> {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                LOGGER.error("Failed to close connection", e);
+            }
+        });
+        connections.clear();
+        LOGGER.info("Connection pool closed");
     }
 }
