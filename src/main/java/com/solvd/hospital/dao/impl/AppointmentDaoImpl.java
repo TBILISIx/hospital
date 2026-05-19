@@ -18,7 +18,7 @@ public class AppointmentDaoImpl extends AbstractDao implements AppointmentDao {
     @Override
     public void create(Appointment appointment, Long patientId, Long doctorId) {
 
-        String sql = "INSERT INTO appointments (scheduled_at, status, notes, doctor_id, patients_id) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO appointments (scheduled_at, status, notes, doctors_id, patients_id) VALUES (?, ?, ?, ?, ?)";
 
         Connection connection = getConnection();
 
@@ -174,7 +174,7 @@ public class AppointmentDaoImpl extends AbstractDao implements AppointmentDao {
     @Override
     public List<Appointment> findByDoctorId(Long doctorId) {
 
-        String sql = "SELECT * FROM appointments WHERE doctor_id=?";
+        String sql = "SELECT * FROM appointments WHERE doctors_id=?";
 
         List<Appointment> list = new ArrayList<>();
 

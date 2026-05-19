@@ -14,14 +14,16 @@ public class Staff {
     private StaffRole role;
     private LocalDate hireDate;
     private boolean active;
+    private Long departmentId;
 
-    public Staff(Long id, String firstName, String lastName, StaffRole role, LocalDate hireDate, boolean active) {
+    public Staff(Long id, String firstName, String lastName, StaffRole role, LocalDate hireDate, boolean active, Long departmentId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
         this.hireDate = hireDate;
         this.active = active;
+        this.departmentId = departmentId;
     }
 
     public Long getId() {
@@ -72,11 +74,25 @@ public class Staff {
         this.active = active;
     }
 
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
     @Override
     public String toString() {
-        return "Staff{id=" + id + ", firstName='" + firstName + "', lastName='" + lastName +
-                "', role=" + role + ", hireDate=" + hireDate + ", active=" + active +
-                ", departmentId=" + "}";
+        return "Staff{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", role=" + role +
+                ", hireDate=" + hireDate +
+                ", active=" + active +
+                ", departmentId=" + departmentId +
+                '}';
     }
 
 }
