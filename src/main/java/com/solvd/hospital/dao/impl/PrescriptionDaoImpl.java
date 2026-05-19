@@ -1,33 +1,28 @@
 package com.solvd.hospital.dao.impl;
 
+import com.solvd.hospital.dao.AbstractDao;
 import com.solvd.hospital.dao.PrescriptionDao;
 import com.solvd.hospital.model.Prescription;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class PrescriptionDaoImpl implements PrescriptionDao {
+public class PrescriptionDaoImpl extends AbstractDao implements PrescriptionDao {
 
     private static final Logger LOGGER = LogManager.getLogger(PrescriptionDaoImpl.class);
-
-    private final DataSource dataSource;
-
-    public PrescriptionDaoImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Override
     public void create(Prescription prescription, Long doctorId, Long patientId) {
 
-        String sql = "INSERT INTO prescriptions (issued_date, instructions, doctoresult_id, patients_id) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO prescriptions (issued_date, instructions, doctor_id, patients_id) VALUES (?, ?, ?, ?)";
+
+        Connection connection = getConnection();
 
         try (
-                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
                         sql,
                         Statement.RETURN_GENERATED_KEYS
@@ -52,6 +47,9 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
         } catch (SQLException e) {
             LOGGER.error("Failed to create prescription", e);
             throw new RuntimeException(e);
+
+        } finally {
+            releaseConnection(connection);
         }
     }
 
@@ -60,8 +58,9 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
 
         String sql = "UPDATE prescriptions SET issued_date=?, instructions=? WHERE id=?";
 
+        Connection connection = getConnection();
+
         try (
-                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
@@ -76,6 +75,9 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
         } catch (SQLException e) {
             LOGGER.error("Failed to update prescription", e);
             throw new RuntimeException(e);
+
+        } finally {
+            releaseConnection(connection);
         }
     }
 
@@ -84,8 +86,9 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
 
         String sql = "DELETE FROM prescriptions WHERE id=?";
 
+        Connection connection = getConnection();
+
         try (
-                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
@@ -98,6 +101,9 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
         } catch (SQLException e) {
             LOGGER.error("Failed to delete prescription id={}", id, e);
             throw new RuntimeException(e);
+
+        } finally {
+            releaseConnection(connection);
         }
     }
 
@@ -106,8 +112,9 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
 
         String sql = "SELECT * FROM prescriptions WHERE id=?";
 
+        Connection connection = getConnection();
+
         try (
-                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
@@ -122,6 +129,9 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
         } catch (SQLException e) {
             LOGGER.error("Failed to find prescription id={}", id, e);
             throw new RuntimeException(e);
+
+        } finally {
+            releaseConnection(connection);
         }
 
         return Optional.empty();
@@ -134,8 +144,9 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
 
         List<Prescription> list = new ArrayList<>();
 
+        Connection connection = getConnection();
+
         try (
-                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
@@ -150,6 +161,9 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
         } catch (SQLException e) {
             LOGGER.error("Failed to find prescriptions for patient id={}", patientId, e);
             throw new RuntimeException(e);
+
+        } finally {
+            releaseConnection(connection);
         }
 
         return list;

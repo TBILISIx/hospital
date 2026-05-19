@@ -15,20 +15,19 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // 1. One shared DataSource from the pool
-        DataSource dataSource = ConnectionPool.getInstance().getDataSource();
 
-        // 2. Build DAOs
-        PatientDaoImpl patientDao = new PatientDaoImpl(dataSource);
-        DoctorDaoImpl doctorDao = new DoctorDaoImpl(dataSource);
-        AppointmentDaoImpl appointmentDao = new AppointmentDaoImpl(dataSource);
-        AdmissionDaoImpl admissionDao = new AdmissionDaoImpl(dataSource);
-        PrescriptionDaoImpl prescriptionDao = new PrescriptionDaoImpl(dataSource);
-        MedicalRecordDaoImpl medicalRecordDao = new MedicalRecordDaoImpl(dataSource);
-        PaymentDaoImpl paymentDao = new PaymentDaoImpl(dataSource);
-        ReportDaoImpl reportDao = new ReportDaoImpl(dataSource);
 
-        // 3. Build Services (inject DAOs)
+        // 1. Build DAOs
+        PatientDaoImpl patientDao = new PatientDaoImpl();
+        DoctorDaoImpl doctorDao = new DoctorDaoImpl();
+        AppointmentDaoImpl appointmentDao = new AppointmentDaoImpl();
+        AdmissionDaoImpl admissionDao = new AdmissionDaoImpl();
+        PrescriptionDaoImpl prescriptionDao = new PrescriptionDaoImpl();
+        MedicalRecordDaoImpl medicalRecordDao = new MedicalRecordDaoImpl();
+        PaymentDaoImpl paymentDao = new PaymentDaoImpl();
+        ReportDaoImpl reportDao = new ReportDaoImpl();
+
+        // 2. Build Services (inject DAOs)
         PatientService patientService = new PatientServiceImpl(patientDao);
         DoctorService doctorService = new DoctorServiceImpl(doctorDao);
         AppointmentService appointmentService = new AppointmentServiceImpl(appointmentDao, doctorDao);
@@ -37,7 +36,7 @@ public class Main {
         PaymentService paymentService = new PaymentServiceImpl(paymentDao);
         ReportService reportService = new ReportServiceImpl(reportDao);
 
-        // 4. Use services – Main never touches a DAO directly
+        // 3. Use services – Main never touches a DAO directly
 
         LOGGER.info("--- All patients ---");
         patientService.getAllPatients()

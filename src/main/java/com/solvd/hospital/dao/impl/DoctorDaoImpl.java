@@ -1,33 +1,28 @@
 package com.solvd.hospital.dao.impl;
 
+import com.solvd.hospital.dao.AbstractDao;
 import com.solvd.hospital.dao.DoctorDao;
 import com.solvd.hospital.model.Doctor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class DoctorDaoImpl implements DoctorDao {
+public class DoctorDaoImpl extends AbstractDao implements DoctorDao {
 
     private static final Logger LOGGER = LogManager.getLogger(DoctorDaoImpl.class);
-
-    private final DataSource dataSource;
-
-    public DoctorDaoImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Override
     public void create(Doctor doctor) {
 
-        String sql = "INSERT INTO doctoresult (first_name, last_name, specialization, available, departments_id) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO doctors (first_name, last_name, specialization, available, departments_id) VALUES (?, ?, ?, ?, ?)";
+
+        Connection connection = getConnection();
 
         try (
-                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
                         sql,
                         Statement.RETURN_GENERATED_KEYS
@@ -53,16 +48,20 @@ public class DoctorDaoImpl implements DoctorDao {
         } catch (SQLException e) {
             LOGGER.error("Failed to create doctor", e);
             throw new RuntimeException(e);
+
+        } finally {
+            releaseConnection(connection);
         }
     }
 
     @Override
     public void update(Doctor doctor) {
 
-        String sql = "UPDATE doctoresult SET first_name=?, last_name=?, specialization=?, available=?, departments_id=? WHERE id=?";
+        String sql = "UPDATE doctors SET first_name=?, last_name=?, specialization=?, available=?, departments_id=? WHERE id=?";
+
+        Connection connection = getConnection();
 
         try (
-                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
@@ -80,16 +79,20 @@ public class DoctorDaoImpl implements DoctorDao {
         } catch (SQLException e) {
             LOGGER.error("Failed to update doctor", e);
             throw new RuntimeException(e);
+
+        } finally {
+            releaseConnection(connection);
         }
     }
 
     @Override
     public void delete(Long id) {
 
-        String sql = "DELETE FROM doctoresult WHERE id=?";
+        String sql = "DELETE FROM doctors WHERE id=?";
+
+        Connection connection = getConnection();
 
         try (
-                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
@@ -102,16 +105,20 @@ public class DoctorDaoImpl implements DoctorDao {
         } catch (SQLException e) {
             LOGGER.error("Failed to delete doctor id={}", id, e);
             throw new RuntimeException(e);
+
+        } finally {
+            releaseConnection(connection);
         }
     }
 
     @Override
     public Optional<Doctor> findById(Long id) {
 
-        String sql = "SELECT * FROM doctoresult WHERE id=?";
+        String sql = "SELECT * FROM doctors WHERE id=?";
+
+        Connection connection = getConnection();
 
         try (
-                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
@@ -126,6 +133,9 @@ public class DoctorDaoImpl implements DoctorDao {
         } catch (SQLException e) {
             LOGGER.error("Failed to find doctor id={}", id, e);
             throw new RuntimeException(e);
+
+        } finally {
+            releaseConnection(connection);
         }
 
         return Optional.empty();
@@ -134,12 +144,13 @@ public class DoctorDaoImpl implements DoctorDao {
     @Override
     public List<Doctor> findAll() {
 
-        String sql = "SELECT * FROM doctoresult";
+        String sql = "SELECT * FROM doctors";
 
         List<Doctor> list = new ArrayList<>();
 
+        Connection connection = getConnection();
+
         try (
-                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
                 ResultSet result = preparedStatement.executeQuery()
         ) {
@@ -149,8 +160,11 @@ public class DoctorDaoImpl implements DoctorDao {
             }
 
         } catch (SQLException e) {
-            LOGGER.error("Failed to find all doctoresult", e);
+            LOGGER.error("Failed to find all doctors", e);
             throw new RuntimeException(e);
+
+        } finally {
+            releaseConnection(connection);
         }
 
         return list;
@@ -159,12 +173,13 @@ public class DoctorDaoImpl implements DoctorDao {
     @Override
     public List<Doctor> findByAvailability(boolean available) {
 
-        String sql = "SELECT * FROM doctoresult WHERE available=?";
+        String sql = "SELECT * FROM doctors WHERE available=?";
 
         List<Doctor> list = new ArrayList<>();
 
+        Connection connection = getConnection();
+
         try (
-                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
@@ -177,8 +192,11 @@ public class DoctorDaoImpl implements DoctorDao {
             }
 
         } catch (SQLException e) {
-            LOGGER.error("Failed to find doctor result by availability", e);
+            LOGGER.error("Failed to find doctors by availability", e);
             throw new RuntimeException(e);
+
+        } finally {
+            releaseConnection(connection);
         }
 
         return list;
