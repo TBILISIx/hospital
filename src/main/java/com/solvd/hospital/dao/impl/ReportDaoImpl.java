@@ -2,99 +2,189 @@ package com.solvd.hospital.dao.impl;
 
 import com.solvd.hospital.dao.AbstractDao;
 import com.solvd.hospital.dao.ReportDao;
+import com.solvd.hospital.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 public class ReportDaoImpl extends AbstractDao implements ReportDao {
 
-    private static final Logger LOGGER = LogManager.getLogger(ReportDaoImpl.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(ReportDaoImpl.class);
+
+    /*
+     * this query will join patients to medical_records to allergies to admissions and to payments
+     * One patient row is repeated for every allergy they have,rows are grouped by patient id and allergies are added
+     * into the same medical record.
+     */
 
     @Override
-    public List<PatientAdmissionReport> findPatientAdmissionReport() {
+    public List<Patient> findPatientsWithAdmissionDetails() {
 
         String sql =
                 "SELECT " +
                         "p.id AS patient_id, " +
-                        "p.first_name AS patient_first_name, " +
-                        "p.last_name AS patient_last_name, " +
+                        "p.first_name, " +
+                        "p.last_name, " +
+                        "p.date_of_birth, " +
+                        "p.phone_number, " +
+                        "p.insured, " +
+
+                        "mr.id AS medical_record_id, " +
+                        "mr.created_date, " +
                         "mr.blood_type, " +
+                        "mr.notes AS mr_notes, " +
+
+                        "al.id AS allergy_id, " +
+                        "al.name AS allergy_name, " +
+
                         "adm.id AS admission_id, " +
-                        "adm.reason AS admission_reason, " +
                         "adm.admitted_at, " +
                         "adm.discharged_at, " +
-                        "rm.room_number, " +
-                        "rm.type AS room_type, " +
-                        "dep.name AS department_name, " +
-                        "mc.name AS clinic_name, " +
+                        "adm.reason, " +
+
+                        "pay.id AS payment_id, " +
+                        "pay.issued_date, " +
                         "pay.total_amount, " +
                         "pay.paid_amount, " +
                         "pay.paid " +
+
                         "FROM patients p " +
                         "INNER JOIN admissions adm ON adm.patients_id = p.id " +
-                        "INNER JOIN rooms rm ON rm.id = adm.rooms_id " +
-                        "INNER JOIN departments dep ON dep.id = rm.departments_id " +
-                        "INNER JOIN medical_clinics mc ON mc.id = dep.medical_clinics_id " +
                         "LEFT JOIN payments pay ON pay.admissions_id = adm.id " +
                         "LEFT JOIN medical_records mr ON mr.patients_id = p.id " +
-                        "ORDER BY p.id";
+                        "LEFT JOIN allergies al ON al.medical_records_id = mr.id " +
+                        "ORDER BY p.id, adm.id, al.id";
 
-        List<PatientAdmissionReport> results = new ArrayList<>();
+        Map<Long, Patient> patientMap = new LinkedHashMap<>();
+        Map<Long, MedicalRecord> recordMap = new HashMap<>();
 
         Connection connection = getConnection();
 
         try (
-                PreparedStatement preparedStatement = connection.prepareStatement(sql);
-                ResultSet result = preparedStatement.executeQuery()
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()
         ) {
 
-            while (result.next()) {
-                results.add(mapRow(result));
+            while (rs.next()) {
+
+                long patientId = rs.getLong("patient_id");
+
+                if (!patientMap.containsKey(patientId)) {
+
+                    Payment payment = mapPayment(rs);
+
+                    Admission admission = new Admission(
+                            rs.getLong("admission_id"),
+                            rs.getTimestamp("admitted_at").toLocalDateTime(),
+                            rs.getTimestamp("discharged_at") != null
+                                    ? rs.getTimestamp("discharged_at").toLocalDateTime()
+                                    : null,
+                            rs.getString("reason"),
+                            payment
+                    );
+
+                    MedicalRecord medicalRecord = null;
+
+                    long mrId = rs.getLong("medical_record_id");
+
+                    if (!rs.wasNull()) {
+
+                        String bloodTypeStr = rs.getString("blood_type");
+
+                        medicalRecord = new MedicalRecord(
+                                mrId,
+                                rs.getDate("created_date").toLocalDate(),
+                                bloodTypeStr != null
+                                        ? BloodType.valueOf(bloodTypeStr)
+                                        : null,
+                                new ArrayList<>(),
+                                rs.getString("mr_notes")
+                        );
+
+                        recordMap.put(patientId, medicalRecord);
+                    }
+
+                    Patient patient = new Patient(
+                            patientId,
+                            rs.getString("first_name"),
+                            rs.getString("last_name"),
+                            rs.getDate("date_of_birth").toLocalDate(),
+                            rs.getString("phone_number"),
+                            rs.getBoolean("insured"),
+                            medicalRecord,
+                            null,
+                            admission,
+                            null
+                    );
+
+                    patientMap.put(patientId, patient);
+                }
+
+                MedicalRecord mr = recordMap.get(patientId);
+
+                if (mr != null) {
+
+                    long allergyId = rs.getLong("allergy_id");
+
+                    if (!rs.wasNull()) {
+
+                        boolean alreadyAdded = mr.getAllergies()
+                                .stream()
+                                .anyMatch(a -> a.getId().equals(allergyId));
+
+                        if (!alreadyAdded) {
+
+                            mr.getAllergies().add(
+                                    new Allergy(
+                                            allergyId,
+                                            rs.getString("allergy_name")
+                                    )
+                            );
+                        }
+                    }
+                }
             }
 
         } catch (SQLException e) {
+
             LOGGER.error("Failed to run patient admission report", e);
             throw new RuntimeException(e);
 
         } finally {
+
             releaseConnection(connection);
         }
 
-        LOGGER.info("Patient admission report: {} rows", results.size());
+        List<Patient> result = new ArrayList<>(patientMap.values());
 
-        return results;
+        LOGGER.info("Patient admission report: {} patients", result.size());
+
+        return result;
     }
 
-    private PatientAdmissionReport mapRow(ResultSet result) throws SQLException {
+    // helper method
+    private Payment mapPayment(ResultSet rs) throws SQLException {
 
-        PatientAdmissionReport row = new PatientAdmissionReport();
+        long paymentId = rs.getLong("payment_id");
 
-        row.setPatientId(result.getLong("patient_id"));
-        row.setPatientFirstName(result.getString("patient_first_name"));
-        row.setPatientLastName(result.getString("patient_last_name"));
-        row.setBloodType(result.getString("blood_type"));
+        if (rs.wasNull()) {
+            return null;
+        }
 
-        row.setAdmissionId(result.getLong("admission_id"));
-        row.setAdmissionReason(result.getString("admission_reason"));
-        row.setAdmittedAt(String.valueOf(result.getTimestamp("admitted_at")));
-
-        Timestamp discharged = result.getTimestamp("discharged_at");
-        row.setDischargedAt(discharged != null
-                ? discharged.toString()
-                : "still admitted");
-
-        row.setRoomNumber(result.getString("room_number"));
-        row.setRoomType(result.getString("room_type"));
-        row.setDepartmentName(result.getString("department_name"));
-        row.setClinicName(result.getString("clinic_name"));
-
-        row.setTotalAmount(String.valueOf(result.getBigDecimal("total_amount")));
-        row.setPaidAmount(String.valueOf(result.getBigDecimal("paid_amount")));
-        row.setPaid(result.getBoolean("paid"));
-
-        return row;
+        return new Payment(
+                paymentId,
+                rs.getLong("admission_id"),
+                rs.getDate("issued_date").toLocalDate(),
+                rs.getBigDecimal("total_amount"),
+                rs.getBigDecimal("paid_amount"),
+                rs.getBoolean("paid")
+        );
     }
+
 }

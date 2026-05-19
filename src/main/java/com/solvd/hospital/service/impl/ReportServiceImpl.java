@@ -1,7 +1,7 @@
 package com.solvd.hospital.service.impl;
 
 import com.solvd.hospital.dao.ReportDao;
-import com.solvd.hospital.dao.impl.PatientAdmissionReport;
+import com.solvd.hospital.model.Patient;
 import com.solvd.hospital.service.ReportService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,12 +19,13 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<PatientAdmissionReport> getPatientAdmissionReport() {
+    public List<Patient> getPatientAdmissionReport() {
 
-        List<PatientAdmissionReport> report = reportDao.findPatientAdmissionReport();
+        List<Patient> report = reportDao.findPatientsWithAdmissionDetails();
 
-        LOGGER.info("Patient admission report: {} rows", report.size());
+        LOGGER.info("Patient admission report: {} patients", report.size());
 
         return report;
     }
 }
+

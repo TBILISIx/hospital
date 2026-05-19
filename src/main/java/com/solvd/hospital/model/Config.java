@@ -1,4 +1,4 @@
-package com.solvd.hospital.enums;
+package com.solvd.hospital.model;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,11 +1,11 @@
 package com.solvd.hospital.service.impl;
 
 import com.solvd.hospital.dao.AppointmentDao;
-import com.solvd.hospital.dao.DoctorDao;
 import com.solvd.hospital.model.Appointment;
 import com.solvd.hospital.model.Appointment.AppointmentStatus;
 import com.solvd.hospital.model.Doctor;
 import com.solvd.hospital.service.AppointmentService;
+import com.solvd.hospital.service.DoctorService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,18 +16,17 @@ public class AppointmentServiceImpl implements AppointmentService {
     private static final Logger LOGGER = LogManager.getLogger(AppointmentServiceImpl.class);
 
     private final AppointmentDao appointmentDao;
-    private final DoctorDao doctorDao;
+    private final DoctorService doctorService;
 
-    public AppointmentServiceImpl(AppointmentDao appointmentDao, DoctorDao doctorDao) {
+    public AppointmentServiceImpl(AppointmentDao appointmentDao, DoctorService doctorService) {
         this.appointmentDao = appointmentDao;
-        this.doctorDao = doctorDao;
+        this.doctorService = doctorService;
     }
 
     @Override
     public Appointment bookAppointment(Appointment appointment, Long patientId, Long doctorId) {
 
-        Doctor doctor = doctorDao.findById(doctorId)
-                .orElseThrow(() -> new RuntimeException("Doctor not found with id=" + doctorId));
+        Doctor doctor = doctorService.getDoctorById(doctorId);
 
         if (!doctor.isAvailable()) {
             throw new RuntimeException("Doctor id=" + doctorId + " is not available");
@@ -69,7 +68,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     public void cancelAppointment(Long appointmentId) {
 
         Appointment appointment = appointmentDao.findById(appointmentId)
-                .orElseThrow(() -> new RuntimeException("Appointment not found with id=" + appointmentId));
+                .orElseThrow(() ->
+                        new RuntimeException("Appointment not found with id=" + appointmentId));
 
         if (appointment.getStatus() == AppointmentStatus.DONE) {
             throw new RuntimeException("Cannot cancel an appointment that is already DONE");
