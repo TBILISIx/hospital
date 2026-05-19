@@ -18,7 +18,7 @@ public class PrescriptionDaoImpl extends AbstractDao implements PrescriptionDao 
     @Override
     public void create(Prescription prescription, Long doctorId, Long patientId) {
 
-        String sql = "INSERT INTO prescriptions (issued_date, instructions, doctor_id, patients_id) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO prescriptions (issued_date, instructions, doctors_id, patients_id) VALUES (?, ?, ?, ?)";
 
         Connection connection = getConnection();
 

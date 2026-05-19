@@ -17,7 +17,7 @@ public class Main {
 
 
 
-        // 1. Build DAOs
+        // 1. building DAOs
         PatientDaoImpl patientDao = new PatientDaoImpl();
         DoctorDaoImpl doctorDao = new DoctorDaoImpl();
         AppointmentDaoImpl appointmentDao = new AppointmentDaoImpl();
@@ -27,7 +27,7 @@ public class Main {
         PaymentDaoImpl paymentDao = new PaymentDaoImpl();
         ReportDaoImpl reportDao = new ReportDaoImpl();
 
-        // 2. Build Services (inject DAOs)
+        // 2. building services  (injecting DAOs)
         PatientService patientService = new PatientServiceImpl(patientDao);
         DoctorService doctorService = new DoctorServiceImpl(doctorDao);
         AppointmentService appointmentService = new AppointmentServiceImpl(appointmentDao, doctorDao);
@@ -36,7 +36,7 @@ public class Main {
         PaymentService paymentService = new PaymentServiceImpl(paymentDao);
         ReportService reportService = new ReportServiceImpl(reportDao);
 
-        // 3. Use services – Main never touches a DAO directly
+        // 3. using services 
 
         LOGGER.info("--- All patients ---");
         patientService.getAllPatients()
