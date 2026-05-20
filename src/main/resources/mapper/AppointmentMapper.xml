@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.hospital.dao.AppointmentDao">
+
+    <!-- ==================== ResultMap ==================== -->
+    <!--
+        The Appointment model holds a Doctor object, but the appointment table only
+        stores doctors_id. We map the FK into a nested Doctor with just its id set
+        so that the service layer can lazy-load or ignore it as needed.
+    -->
+    <resultMap id="appointmentResultMap" type="Appointment">
+        <id     property="id"          column="id"/>
+        <result property="patientID"   column="patients_id"/>
+        <result property="scheduledAt" column="scheduled_at"/>
+        <result property="status"      column="status"/>
+        <result property="notes"       column="notes"/>
+        <association property="doctor" javaType="Doctor">
+            <id property="id" column="doctors_id"/>
+        </association>
+    </resultMap>
+
+    <!-- ==================== INSERT ==================== -->
+    <!--
+        The JDBC impl accepts patientId + doctorId as separate params.
+        Here we embed them directly on the Appointment object
+        (patientID and doctor.id) so a single parameter object suffices.
+    -->
+    <insert id="create" parameterType="Appointment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO appointments (scheduled_at, status, notes, doctors_id, patients_id)
+        VALUES (#{scheduledAt}, #{status}, #{notes}, #{doctor.id}, #{patientID})
+    </insert>
+
+    <!-- ==================== UPDATE ==================== -->
+    <update id="update" parameterType="Appointment">
+        UPDATE appointments
+        SET scheduled_at = #{scheduledAt},
+        status       = #{status},
+        notes        = #{notes}
+        WHERE id = #{id}
+    </update>
+
+    <!-- ==================== DELETE ==================== -->
+    <delete id="delete" parameterType="long">
+        DELETE FROM appointments WHERE id = #{id}
+    </delete>
+
+    <!-- ==================== SELECT ==================== -->
+    <select id="findById" parameterType="long" resultMap="appointmentResultMap">
+        SELECT * FROM appointments WHERE id = #{id}
+    </select>
+
+    <select id="findByPatientId" parameterType="long" resultMap="appointmentResultMap">
+        SELECT * FROM appointments WHERE patients_id = #{patientId}
+    </select>
+
+    <select id="findByDoctorId" parameterType="long" resultMap="appointmentResultMap">
+        SELECT * FROM appointments WHERE doctors_id = #{doctorId}
+    </select>
+
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.hospital.dao.AdmissionDao">
+
+    <!-- ==================== ResultMap ==================== -->
+    <resultMap id="admissionResultMap" type="Admission">
+        <id     property="id"           column="id"/>
+        <result property="admittedAt"   column="admitted_at"/>
+        <result property="dischargedAt" column="discharged_at"/>
+        <result property="reason"       column="reason"/>
+        <!-- payment is not loaded in basic queries; see ReportMapper for the joined version -->
+    </resultMap>
+
+    <!-- ==================== INSERT ==================== -->
+    <!--
+        roomId and patientId are stored directly on the Admission object when
+        calling the MyBatis impl (set before passing to the mapper).
+        We expose them as roomId / patientId properties via the wrapper map
+        in the impl class (see MyBatisAdmissionDaoImpl).
+    -->
+    <insert id="create" parameterType="map" useGeneratedKeys="true" keyProperty="admission.id">
+        INSERT INTO admissions (admitted_at, discharged_at, reason, rooms_id, patients_id)
+        VALUES (
+        #{admission.admittedAt},
+        #{admission.dischargedAt},
+        #{admission.reason},
+        #{roomId},
+        #{patientId}
+        )
+    </insert>
+
+    <!-- ==================== UPDATE ==================== -->
+    <update id="update" parameterType="Admission">
+        UPDATE admissions
+        SET admitted_at   = #{admittedAt},
+        discharged_at = #{dischargedAt},
+        reason        = #{reason}
+        WHERE id = #{id}
+    </update>
+
+    <!-- ==================== DELETE ==================== -->
+    <delete id="delete" parameterType="long">
+        DELETE FROM admissions WHERE id = #{id}
+    </delete>
+
+    <!-- ==================== SELECT ==================== -->
+    <select id="findById" parameterType="long" resultMap="admissionResultMap">
+        SELECT * FROM admissions WHERE id = #{id}
+    </select>
+
+    <select id="findByPatientId" parameterType="long" resultMap="admissionResultMap">
+        SELECT * FROM admissions WHERE patients_id = #{patientId}
+    </select>
+
+    <select id="findActive" resultMap="admissionResultMap">
+        SELECT * FROM admissions WHERE discharged_at IS NULL
+    </select>
+
+</mapper>
