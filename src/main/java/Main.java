@@ -27,20 +27,15 @@ public class Main {
         // build services
         PatientService patientService = new PatientServiceImpl(patientDao);
         DoctorService doctorService = new DoctorServiceImpl(doctorDao);
-        PrescriptionService prescriptionService =
-                new PrescriptionServiceImpl(prescriptionDao);
+        PrescriptionService prescriptionService = new PrescriptionServiceImpl(prescriptionDao);
 
-        AdmissionService admissionService =
-                new AdmissionServiceImpl(admissionDao);
+        AdmissionService admissionService = new AdmissionServiceImpl(admissionDao);
 
-        PaymentService paymentService =
-                new PaymentServiceImpl(paymentDao);
+        PaymentService paymentService = new PaymentServiceImpl(paymentDao);
 
-        ReportService reportService =
-                new ReportServiceImpl(reportDao);
+        ReportService reportService = new ReportServiceImpl(reportDao);
 
-        AppointmentService appointmentService =
-                new AppointmentServiceImpl(appointmentDao, doctorService);
+        AppointmentService appointmentService = new AppointmentServiceImpl(appointmentDao, doctorService);
 
         LOGGER.info("--- All patients ---");
 
