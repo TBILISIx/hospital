@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.hospital.dao.PaymentDao">
+
+    <!-- ==================== ResultMap ==================== -->
+    <resultMap id="paymentResultMap" type="Payment">
+        <id     property="id"          column="id"/>
+        <result property="admissionId" column="admissions_id"/>
+        <result property="issuedDate"  column="issued_date"/>
+        <result property="totalAmount" column="total_amount"/>
+        <result property="paidAmount"  column="paid_amount"/>
+        <result property="paid"        column="paid"/>
+    </resultMap>
+
+    <!-- ==================== INSERT ==================== -->
+    <insert id="create" parameterType="Payment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO payments (issued_date, total_amount, paid_amount, paid, admissions_id)
+        VALUES (#{issuedDate}, #{totalAmount}, #{paidAmount}, #{paid}, #{admissionId})
+    </insert>
+
+    <!-- ==================== UPDATE ==================== -->
+    <update id="update" parameterType="Payment">
+        UPDATE payments
+        SET issued_date  = #{issuedDate},
+        total_amount = #{totalAmount},
+        paid_amount  = #{paidAmount},
+        paid         = #{paid}
+        WHERE id = #{id}
+    </update>
+
+    <!-- ==================== DELETE ==================== -->
+    <delete id="delete" parameterType="long">
+        DELETE FROM payments WHERE id = #{id}
+    </delete>
+
+    <!-- ==================== SELECT ==================== -->
+    <select id="findById" parameterType="long" resultMap="paymentResultMap">
+        SELECT * FROM payments WHERE id = #{id}
+    </select>
+
+    <select id="findByAdmissionId" parameterType="long" resultMap="paymentResultMap">
+        SELECT * FROM payments WHERE admissions_id = #{admissionId}
+    </select>
+
+    <select id="findUnpaid" resultMap="paymentResultMap">
+        SELECT * FROM payments WHERE paid = 0
+    </select>
+
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.hospital.dao.PatientDao">
+
+    <!-- ==================== ResultMap ==================== -->
+    <resultMap id="patientResultMap" type="Patient">
+        <id     property="id"          column="id"/>
+        <result property="firstName"   column="first_name"/>
+        <result property="lastName"    column="last_name"/>
+        <result property="dateOfBirth" column="date_of_birth"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="insured"     column="insured"/>
+    </resultMap>
+
+    <!-- ==================== INSERT ==================== -->
+    <insert id="create" parameterType="Patient" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO patients (first_name, last_name, date_of_birth, phone_number, insured)
+        VALUES (#{firstName}, #{lastName}, #{dateOfBirth}, #{phoneNumber}, #{insured})
+    </insert>
+
+    <!-- ==================== UPDATE ==================== -->
+    <update id="update" parameterType="Patient">
+        UPDATE patients
+        SET first_name   = #{firstName},
+        last_name    = #{lastName},
+        date_of_birth = #{dateOfBirth},
+        phone_number  = #{phoneNumber},
+        insured       = #{insured}
+        WHERE id = #{id}
+    </update>
+
+    <!-- ==================== DELETE ==================== -->
+    <delete id="delete" parameterType="long">
+        DELETE FROM patients WHERE id = #{id}
+    </delete>
+
+    <!-- ==================== SELECT ==================== -->
+    <select id="findById" parameterType="long" resultMap="patientResultMap">
+        SELECT * FROM patients WHERE id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="patientResultMap">
+        SELECT * FROM patients
+    </select>
+
+</mapper>
