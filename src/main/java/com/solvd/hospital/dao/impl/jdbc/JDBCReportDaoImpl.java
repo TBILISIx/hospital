@@ -1,4 +1,4 @@
-package com.solvd.hospital.dao.impl;
+package com.solvd.hospital.dao.impl.jdbc;
 
 import com.solvd.hospital.dao.AbstractDao;
 import com.solvd.hospital.dao.ReportDao;
@@ -12,10 +12,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class ReportDaoImpl extends AbstractDao implements ReportDao {
+public class JDBCReportDaoImpl extends AbstractDao implements ReportDao {
 
     private static final Logger LOGGER =
-            LogManager.getLogger(ReportDaoImpl.class);
+            LogManager.getLogger(JDBCReportDaoImpl.class);
 
 
     @Override

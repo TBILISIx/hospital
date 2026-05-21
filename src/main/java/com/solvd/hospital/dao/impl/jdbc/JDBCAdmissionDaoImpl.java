@@ -1,8 +1,8 @@
-package com.solvd.hospital.dao.impl;
+package com.solvd.hospital.dao.impl.jdbc;
 
 import com.solvd.hospital.dao.AbstractDao;
-import com.solvd.hospital.dao.AppointmentDao;
-import com.solvd.hospital.model.Appointment;
+import com.solvd.hospital.dao.AdmissionDao;
+import com.solvd.hospital.model.Admission;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,14 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class AppointmentDaoImpl extends AbstractDao implements AppointmentDao {
+public class JDBCAdmissionDaoImpl extends AbstractDao implements AdmissionDao {
 
-    private static final Logger LOGGER = LogManager.getLogger(AppointmentDaoImpl.class);
+    private static final Logger LOGGER = LogManager.getLogger(JDBCAdmissionDaoImpl.class);
 
     @Override
-    public void create(Appointment appointment, Long patientId, Long doctorId) {
+    public void create(Admission admission, Long patientId, Long roomId) {
 
-        String sql = "INSERT INTO appointments (scheduled_at, status, notes, doctors_id, patients_id) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO admissions (admitted_at, discharged_at, reason, rooms_id, patients_id) VALUES (?, ?, ?, ?, ?)";
 
         Connection connection = getConnection();
 
@@ -29,10 +29,16 @@ public class AppointmentDaoImpl extends AbstractDao implements AppointmentDao {
                 )
         ) {
 
-            preparedStatement.setTimestamp(1, Timestamp.valueOf(appointment.getScheduledAt()));
-            preparedStatement.setString(2, appointment.getStatus().name());
-            preparedStatement.setString(3, appointment.getNotes());
-            preparedStatement.setLong(4, doctorId);
+            preparedStatement.setTimestamp(1, Timestamp.valueOf(admission.getAdmittedAt()));
+
+            if (admission.getDischargedAt() != null) {
+                preparedStatement.setTimestamp(2, Timestamp.valueOf(admission.getDischargedAt()));
+            } else {
+                preparedStatement.setNull(2, Types.TIMESTAMP);
+            }
+
+            preparedStatement.setString(3, admission.getReason());
+            preparedStatement.setLong(4, roomId);
             preparedStatement.setLong(5, patientId);
 
             preparedStatement.executeUpdate();
@@ -40,13 +46,13 @@ public class AppointmentDaoImpl extends AbstractDao implements AppointmentDao {
             ResultSet keys = preparedStatement.getGeneratedKeys();
 
             if (keys.next()) {
-                appointment.setId(keys.getLong(1));
+                admission.setId(keys.getLong(1));
             }
 
-            LOGGER.info("Created appointment id={}", appointment.getId());
+            LOGGER.info("Created admission id={}", admission.getId());
 
         } catch (SQLException e) {
-            LOGGER.error("Failed to create appointment", e);
+            LOGGER.error("Failed to create admission", e);
             throw new RuntimeException(e);
 
         } finally {
@@ -55,9 +61,9 @@ public class AppointmentDaoImpl extends AbstractDao implements AppointmentDao {
     }
 
     @Override
-    public void update(Appointment appointment) {
+    public void update(Admission admission) {
 
-        String sql = "UPDATE appointments SET scheduled_at=?, status=?, notes=? WHERE id=?";
+        String sql = "UPDATE admissions SET admitted_at=?, discharged_at=?, reason=? WHERE id=?";
 
         Connection connection = getConnection();
 
@@ -65,17 +71,23 @@ public class AppointmentDaoImpl extends AbstractDao implements AppointmentDao {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
-            preparedStatement.setTimestamp(1, Timestamp.valueOf(appointment.getScheduledAt()));
-            preparedStatement.setString(2, appointment.getStatus().name());
-            preparedStatement.setString(3, appointment.getNotes());
-            preparedStatement.setLong(4, appointment.getId());
+            preparedStatement.setTimestamp(1, Timestamp.valueOf(admission.getAdmittedAt()));
+
+            if (admission.getDischargedAt() != null) {
+                preparedStatement.setTimestamp(2, Timestamp.valueOf(admission.getDischargedAt()));
+            } else {
+                preparedStatement.setNull(2, Types.TIMESTAMP);
+            }
+
+            preparedStatement.setString(3, admission.getReason());
+            preparedStatement.setLong(4, admission.getId());
 
             preparedStatement.executeUpdate();
 
-            LOGGER.info("Updated appointment id={}", appointment.getId());
+            LOGGER.info("Updated admission id={}", admission.getId());
 
         } catch (SQLException e) {
-            LOGGER.error("Failed to update appointment", e);
+            LOGGER.error("Failed to update admission", e);
             throw new RuntimeException(e);
 
         } finally {
@@ -86,7 +98,7 @@ public class AppointmentDaoImpl extends AbstractDao implements AppointmentDao {
     @Override
     public void delete(Long id) {
 
-        String sql = "DELETE FROM appointments WHERE id=?";
+        String sql = "DELETE FROM admissions WHERE id=?";
 
         Connection connection = getConnection();
 
@@ -98,10 +110,10 @@ public class AppointmentDaoImpl extends AbstractDao implements AppointmentDao {
 
             preparedStatement.executeUpdate();
 
-            LOGGER.info("Deleted appointment id={}", id);
+            LOGGER.info("Deleted admission id={}", id);
 
         } catch (SQLException e) {
-            LOGGER.error("Failed to delete appointment id={}", id, e);
+            LOGGER.error("Failed to delete admission id={}", id, e);
             throw new RuntimeException(e);
 
         } finally {
@@ -110,9 +122,9 @@ public class AppointmentDaoImpl extends AbstractDao implements AppointmentDao {
     }
 
     @Override
-    public Optional<Appointment> findById(Long id) {
+    public Optional<Admission> findById(Long id) {
 
-        String sql = "SELECT * FROM appointments WHERE id=?";
+        String sql = "SELECT * FROM admissions WHERE id=?";
 
         Connection connection = getConnection();
 
@@ -129,7 +141,7 @@ public class AppointmentDaoImpl extends AbstractDao implements AppointmentDao {
             }
 
         } catch (SQLException e) {
-            LOGGER.error("Failed to find appointment id={}", id, e);
+            LOGGER.error("Failed to find admission id={}", id, e);
             throw new RuntimeException(e);
 
         } finally {
@@ -140,11 +152,11 @@ public class AppointmentDaoImpl extends AbstractDao implements AppointmentDao {
     }
 
     @Override
-    public List<Appointment> findByPatientId(Long patientId) {
+    public List<Admission> findByPatientId(Long patientId) {
 
-        String sql = "SELECT * FROM appointments WHERE patients_id=?";
+        String sql = "SELECT * FROM admissions WHERE patients_id=?";
 
-        List<Appointment> list = new ArrayList<>();
+        List<Admission> list = new ArrayList<>();
 
         Connection connection = getConnection();
 
@@ -161,7 +173,7 @@ public class AppointmentDaoImpl extends AbstractDao implements AppointmentDao {
             }
 
         } catch (SQLException e) {
-            LOGGER.error("Failed to find appointments for patient id={}", patientId, e);
+            LOGGER.error("Failed to find admissions for patient id={}", patientId, e);
             throw new RuntimeException(e);
 
         } finally {
@@ -172,28 +184,25 @@ public class AppointmentDaoImpl extends AbstractDao implements AppointmentDao {
     }
 
     @Override
-    public List<Appointment> findByDoctorId(Long doctorId) {
+    public List<Admission> findActive() {
 
-        String sql = "SELECT * FROM appointments WHERE doctors_id=?";
+        String sql = "SELECT * FROM admissions WHERE discharged_at IS NULL";
 
-        List<Appointment> list = new ArrayList<>();
+        List<Admission> list = new ArrayList<>();
 
         Connection connection = getConnection();
 
         try (
-                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                ResultSet result = preparedStatement.executeQuery()
         ) {
-
-            preparedStatement.setLong(1, doctorId);
-
-            ResultSet result = preparedStatement.executeQuery();
 
             while (result.next()) {
                 list.add(mapRow(result));
             }
 
         } catch (SQLException e) {
-            LOGGER.error("Failed to find appointments for doctor id={}", doctorId, e);
+            LOGGER.error("Failed to find active admissions", e);
             throw new RuntimeException(e);
 
         } finally {
@@ -203,15 +212,16 @@ public class AppointmentDaoImpl extends AbstractDao implements AppointmentDao {
         return list;
     }
 
-    private Appointment mapRow(ResultSet result) throws SQLException {
+    private Admission mapRow(ResultSet result) throws SQLException {
 
-        return new Appointment(
+        Timestamp discharged = result.getTimestamp("discharged_at");
+
+        return new Admission(
                 result.getLong("id"),
-                result.getLong("patients_id"),
-                null,
-                result.getTimestamp("scheduled_at").toLocalDateTime(),
-                Appointment.AppointmentStatus.valueOf(result.getString("status")),
-                result.getString("notes")
+                result.getTimestamp("admitted_at").toLocalDateTime(),
+                discharged != null ? discharged.toLocalDateTime() : null,
+                result.getString("reason"),
+                null
         );
     }
 }

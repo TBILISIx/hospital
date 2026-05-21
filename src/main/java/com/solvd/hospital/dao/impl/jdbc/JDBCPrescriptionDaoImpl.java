@@ -1,4 +1,4 @@
-package com.solvd.hospital.dao.impl;
+package com.solvd.hospital.dao.impl.jdbc;
 
 import com.solvd.hospital.dao.AbstractDao;
 import com.solvd.hospital.dao.PrescriptionDao;
@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class PrescriptionDaoImpl extends AbstractDao implements PrescriptionDao {
+public class JDBCPrescriptionDaoImpl extends AbstractDao implements PrescriptionDao {
 
-    private static final Logger LOGGER = LogManager.getLogger(PrescriptionDaoImpl.class);
+    private static final Logger LOGGER = LogManager.getLogger(JDBCPrescriptionDaoImpl.class);
 
     @Override
     public void create(Prescription prescription, Long doctorId, Long patientId) {
