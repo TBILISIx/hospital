@@ -12,7 +12,7 @@ import java.util.List;
 public class MyBatisReportDaoImpl implements ReportDao {
 
     private static final Logger LOGGER = LogManager.getLogger(MyBatisReportDaoImpl.class);
-    private static final String NAMESPACE = "com.solvd.hospital.dao.mybatis.MyBatisReportDao.";
+    private static final String NAMESPACE = "com.solvd.hospital.dao.ReportDao.";
 
     @Override
     public List<Patient> findPatientsWithAdmissionDetails() {

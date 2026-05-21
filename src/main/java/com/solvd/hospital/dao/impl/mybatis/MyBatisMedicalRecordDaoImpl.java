@@ -14,7 +14,7 @@ import java.util.Optional;
 public class MyBatisMedicalRecordDaoImpl implements MedicalRecordDao {
 
     private static final Logger LOGGER = LogManager.getLogger(MyBatisMedicalRecordDaoImpl.class);
-    private static final String NAMESPACE = "com.solvd.hospital.dao.mybatis.MyBatisMedicalRecordDao.";
+    private static final String NAMESPACE = "com.solvd.hospital.dao.MedicalRecordDao.";
 
     @Override
     public void create(MedicalRecord medicalRecord, Long patientId) {

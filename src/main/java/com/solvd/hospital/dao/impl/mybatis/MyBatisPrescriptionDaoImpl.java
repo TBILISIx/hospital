@@ -15,7 +15,7 @@ import java.util.Optional;
 public class MyBatisPrescriptionDaoImpl implements PrescriptionDao {
 
     private static final Logger LOGGER = LogManager.getLogger(MyBatisPrescriptionDaoImpl.class);
-    private static final String NAMESPACE = "com.solvd.hospital.dao.mybatis.MyBatisPrescriptionDao.";
+    private static final String NAMESPACE = "com.solvd.hospital.dao.PrescriptionDao.";
 
     @Override
     public void create(Prescription prescription, Long doctorId, Long patientId) {
