@@ -13,6 +13,11 @@ public class Doctor {
     private List<Prescription> prescriptions;
     private Long departmentId; // needed for DB mapping
 
+
+    public Doctor() {
+
+    }
+
     public Doctor(Long id, String firstName, String lastName, String specialization,
                   boolean available, List<Appointment> appointments, List<Prescription> prescriptions) {
         this.id = id;

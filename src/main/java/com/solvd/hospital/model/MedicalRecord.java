@@ -11,6 +11,11 @@ public class MedicalRecord {
     private List<Allergy> allergies;
     private String notes;
 
+
+    public MedicalRecord() {
+    }
+
+
     public MedicalRecord(Long id, LocalDate createdDate, BloodType bloodType, List<Allergy> allergies, String notes) {
         this.id = id;
         this.createdDate = createdDate;

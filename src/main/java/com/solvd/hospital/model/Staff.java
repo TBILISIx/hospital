@@ -16,6 +16,9 @@ public class Staff {
     private boolean active;
     private Long departmentId;
 
+    public Staff() {
+    }
+
     public Staff(Long id, String firstName, String lastName, StaffRole role, LocalDate hireDate, boolean active, Long departmentId) {
         this.id = id;
         this.firstName = firstName;

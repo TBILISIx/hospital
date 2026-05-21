@@ -11,6 +11,10 @@ public class Department {
     private List<Staff> staff;
     private List<Room> rooms;
 
+
+    public Department() {
+
+    }
     public Department(Long id, String name, String location, List<Doctor> doctors, List<Staff> staff, List<Room> rooms) {
         this.id = id;
         this.name = name;

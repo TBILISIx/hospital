@@ -16,6 +16,9 @@ public class Patient {
     private Admission admission;
     private List<Prescription> prescriptions;
 
+    public Patient() {
+    }
+
     public Patient(Long id, String firstName, String lastName, LocalDate dateOfBirth, String phoneNumber, boolean insured, MedicalRecord medicalRecord, List<Appointment> appointments, Admission admission, List<Prescription> prescriptions) {
         this.id = id;
         this.firstName = firstName;

@@ -15,6 +15,8 @@ public class Room {
     private boolean occupied;
     private List<Admission> admissions;
 
+    public Room() {}
+
     public Room(Long id, String roomNumber, RoomType type, Long capacity, boolean occupied, List<Admission> admissions) {
         this.id = id;
         this.roomNumber = roomNumber;

@@ -26,7 +26,7 @@
     <select id="selectAllergiesByMedicalRecordId"
             parameterType="long"
             resultMap="allergyResultMap">
-        SELECT * FROM allergies WHERE medical_records_id = #{medicalRecordId}
+        SELECT * FROM allergies WHERE medical_records_id = #{value}
     </select>
 
     <!-- ==================== INSERT ==================== -->
