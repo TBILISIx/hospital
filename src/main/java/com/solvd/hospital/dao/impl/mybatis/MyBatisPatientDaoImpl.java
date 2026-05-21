@@ -13,7 +13,7 @@ import java.util.Optional;
 public class MyBatisPatientDaoImpl implements PatientDao {
 
     private static final Logger LOGGER = LogManager.getLogger(MyBatisPatientDaoImpl.class);
-    private static final String NAMESPACE = "com.solvd.hospital.dao.mybatis.MyBatisPatientDao.";
+    private static final String NAMESPACE = "com.solvd.hospital.dao.PatientDao.";
 
     @Override
     public void create(Patient patient) {

@@ -14,7 +14,7 @@ import java.util.Optional;
 public class MyBatisAppointmentDaoImpl implements AppointmentDao {
 
     private static final Logger LOGGER = LogManager.getLogger(MyBatisAppointmentDaoImpl.class);
-    private static final String NAMESPACE = "com.solvd.hospital.dao.mybatis.MyBatisAppointmentDao.";
+    private static final String NAMESPACE = "com.solvd.hospital.dao.AppointmentDao.";
 
     @Override
     public void create(Appointment appointment, Long patientId, Long doctorId) {

@@ -13,7 +13,7 @@ import java.util.Optional;
 public class MyBatisPaymentDaoImpl implements PaymentDao {
 
     private static final Logger LOGGER = LogManager.getLogger(MyBatisPaymentDaoImpl.class);
-    private static final String NAMESPACE = "com.solvd.hospital.dao.mybatis.MyBatisPaymentDao.";
+    private static final String NAMESPACE = "com.solvd.hospital.dao.PaymentDao.";
 
     @Override
     public void create(Payment payment) {

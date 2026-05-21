@@ -15,7 +15,7 @@ import java.util.Optional;
 public class MyBatisAdmissionDaoImpl implements AdmissionDao {
 
     private static final Logger LOGGER = LogManager.getLogger(MyBatisAdmissionDaoImpl.class);
-    private static final String NAMESPACE = "com.solvd.hospital.dao.mybatis.MyBatisAdmissionDao.";
+    private static final String NAMESPACE = "com.solvd.hospital.dao.AdmissionDao.";
 
     @Override
     public void create(Admission admission, Long patientId, Long roomId) {
