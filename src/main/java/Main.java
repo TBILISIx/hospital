@@ -1,5 +1,4 @@
-import com.solvd.hospital.dao.impl.*;
-import com.solvd.hospital.ConnectionPool;
+import com.solvd.hospital.dao.impl.jdbc.*;
 import com.solvd.hospital.model.Patient;
 import com.solvd.hospital.service.*;
 import com.solvd.hospital.service.impl.*;
@@ -14,15 +13,29 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // build DAOs
-        PatientDaoImpl patientDao = new PatientDaoImpl();
-        DoctorDaoImpl doctorDao = new DoctorDaoImpl();
-        AppointmentDaoImpl appointmentDao = new AppointmentDaoImpl();
-        AdmissionDaoImpl admissionDao = new AdmissionDaoImpl();
-        PrescriptionDaoImpl prescriptionDao = new PrescriptionDaoImpl();
-        MedicalRecordDaoImpl medicalRecordDao = new MedicalRecordDaoImpl();
-        PaymentDaoImpl paymentDao = new PaymentDaoImpl();
-        ReportDaoImpl reportDao = new ReportDaoImpl();
+        // build DAOs with JDBC
+        JDBCPatientDaoImpl patientDao = new JDBCPatientDaoImpl();
+        JDBCDoctorDaoImpl doctorDao = new JDBCDoctorDaoImpl();
+        JDBCAppointmentDaoImpl appointmentDao = new JDBCAppointmentDaoImpl();
+        JDBCAdmissionDaoImpl admissionDao = new JDBCAdmissionDaoImpl();
+        JDBCPrescriptionDaoImpl prescriptionDao = new JDBCPrescriptionDaoImpl();
+        JDBCMedicalRecordDaoImpl medicalRecordDao = new JDBCMedicalRecordDaoImpl();
+        JDBCPaymentDaoImpl paymentDao = new JDBCPaymentDaoImpl();
+        JDBCReportDaoImpl reportDao = new JDBCReportDaoImpl();
+
+
+        // build DAOs with MyBatis
+//        MyBatisPatientDaoImpl patientDao = new MyBatisPatientDaoImpl();
+//        MyBatisDoctorDaoImpl doctorDao = new MyBatisDoctorDaoImpl();
+//        MyBatisAppointmentDaoImpl appointmentDao = new MyBatisAppointmentDaoImpl();
+//        MyBatisAdmissionDaoImpl admissionDao = new MyBatisAdmissionDaoImpl();
+//        MyBatisPrescriptionDaoImpl prescriptionDao = new MyBatisPrescriptionDaoImpl();
+//        MyBatisMedicalRecordDaoImpl medicalRecordDao = new MyBatisMedicalRecordDaoImpl();
+//        MyBatisPaymentDaoImpl paymentDao = new MyBatisPaymentDaoImpl();
+//        MyBatisReportDaoImpl reportDao = new MyBatisReportDaoImpl();
+
+
+
 
         // build services
         PatientService patientService = new PatientServiceImpl(patientDao);
@@ -129,6 +142,8 @@ public class Main {
         });
 
         // close connection pool
-        ConnectionPool.getInstance().close();
+
+        // in case of MyBatis this is not needed its done in mybatis-config
+//        ConnectionPool.getInstance().close();
     }
 }

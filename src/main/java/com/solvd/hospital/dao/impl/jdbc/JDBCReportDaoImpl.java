@@ -1,4 +1,4 @@
-package com.solvd.hospital.dao.impl;
+package com.solvd.hospital.dao.impl.jdbc;
 
 import com.solvd.hospital.dao.AbstractDao;
 import com.solvd.hospital.dao.ReportDao;
@@ -12,16 +12,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class ReportDaoImpl extends AbstractDao implements ReportDao {
+public class JDBCReportDaoImpl extends AbstractDao implements ReportDao {
 
     private static final Logger LOGGER =
-            LogManager.getLogger(ReportDaoImpl.class);
+            LogManager.getLogger(JDBCReportDaoImpl.class);
 
-    /*
-     * this query will join patients to medical_records to allergies to admissions and to payments
-     * One patient row is repeated for every allergy they have,rows are grouped by patient id and allergies are added
-     * into the same medical record.
-     */
 
     @Override
     public List<Patient> findPatientsWithAdmissionDetails() {

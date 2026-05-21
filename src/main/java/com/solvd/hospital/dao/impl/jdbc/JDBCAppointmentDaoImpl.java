@@ -1,8 +1,8 @@
-package com.solvd.hospital.dao.impl;
+package com.solvd.hospital.dao.impl.jdbc;
 
 import com.solvd.hospital.dao.AbstractDao;
-import com.solvd.hospital.dao.DoctorDao;
-import com.solvd.hospital.model.Doctor;
+import com.solvd.hospital.dao.AppointmentDao;
+import com.solvd.hospital.model.Appointment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,14 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class DoctorDaoImpl extends AbstractDao implements DoctorDao {
+public class JDBCAppointmentDaoImpl extends AbstractDao implements AppointmentDao {
 
-    private static final Logger LOGGER = LogManager.getLogger(DoctorDaoImpl.class);
+    private static final Logger LOGGER = LogManager.getLogger(JDBCAppointmentDaoImpl.class);
 
     @Override
-    public void create(Doctor doctor) {
+    public void create(Appointment appointment, Long patientId, Long doctorId) {
 
-        String sql = "INSERT INTO doctors (first_name, last_name, specialization, available, departments_id) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO appointments (scheduled_at, status, notes, doctors_id, patients_id) VALUES (?, ?, ?, ?, ?)";
 
         Connection connection = getConnection();
 
@@ -29,24 +29,24 @@ public class DoctorDaoImpl extends AbstractDao implements DoctorDao {
                 )
         ) {
 
-            preparedStatement.setString(1, doctor.getFirstName());
-            preparedStatement.setString(2, doctor.getLastName());
-            preparedStatement.setString(3, doctor.getSpecialization());
-            preparedStatement.setBoolean(4, doctor.isAvailable());
-            preparedStatement.setLong(5, doctor.getDepartmentId());
+            preparedStatement.setTimestamp(1, Timestamp.valueOf(appointment.getScheduledAt()));
+            preparedStatement.setString(2, appointment.getStatus().name());
+            preparedStatement.setString(3, appointment.getNotes());
+            preparedStatement.setLong(4, doctorId);
+            preparedStatement.setLong(5, patientId);
 
             preparedStatement.executeUpdate();
 
             ResultSet keys = preparedStatement.getGeneratedKeys();
 
             if (keys.next()) {
-                doctor.setId(keys.getLong(1));
+                appointment.setId(keys.getLong(1));
             }
 
-            LOGGER.info("Created doctor id={}", doctor.getId());
+            LOGGER.info("Created appointment id={}", appointment.getId());
 
         } catch (SQLException e) {
-            LOGGER.error("Failed to create doctor", e);
+            LOGGER.error("Failed to create appointment", e);
             throw new RuntimeException(e);
 
         } finally {
@@ -55,9 +55,9 @@ public class DoctorDaoImpl extends AbstractDao implements DoctorDao {
     }
 
     @Override
-    public void update(Doctor doctor) {
+    public void update(Appointment appointment) {
 
-        String sql = "UPDATE doctors SET first_name=?, last_name=?, specialization=?, available=?, departments_id=? WHERE id=?";
+        String sql = "UPDATE appointments SET scheduled_at=?, status=?, notes=? WHERE id=?";
 
         Connection connection = getConnection();
 
@@ -65,19 +65,17 @@ public class DoctorDaoImpl extends AbstractDao implements DoctorDao {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
-            preparedStatement.setString(1, doctor.getFirstName());
-            preparedStatement.setString(2, doctor.getLastName());
-            preparedStatement.setString(3, doctor.getSpecialization());
-            preparedStatement.setBoolean(4, doctor.isAvailable());
-            preparedStatement.setLong(5, doctor.getDepartmentId());
-            preparedStatement.setLong(6, doctor.getId());
+            preparedStatement.setTimestamp(1, Timestamp.valueOf(appointment.getScheduledAt()));
+            preparedStatement.setString(2, appointment.getStatus().name());
+            preparedStatement.setString(3, appointment.getNotes());
+            preparedStatement.setLong(4, appointment.getId());
 
             preparedStatement.executeUpdate();
 
-            LOGGER.info("Updated doctor id={}", doctor.getId());
+            LOGGER.info("Updated appointment id={}", appointment.getId());
 
         } catch (SQLException e) {
-            LOGGER.error("Failed to update doctor", e);
+            LOGGER.error("Failed to update appointment", e);
             throw new RuntimeException(e);
 
         } finally {
@@ -88,7 +86,7 @@ public class DoctorDaoImpl extends AbstractDao implements DoctorDao {
     @Override
     public void delete(Long id) {
 
-        String sql = "DELETE FROM doctors WHERE id=?";
+        String sql = "DELETE FROM appointments WHERE id=?";
 
         Connection connection = getConnection();
 
@@ -100,10 +98,10 @@ public class DoctorDaoImpl extends AbstractDao implements DoctorDao {
 
             preparedStatement.executeUpdate();
 
-            LOGGER.info("Deleted doctor id={}", id);
+            LOGGER.info("Deleted appointment id={}", id);
 
         } catch (SQLException e) {
-            LOGGER.error("Failed to delete doctor id={}", id, e);
+            LOGGER.error("Failed to delete appointment id={}", id, e);
             throw new RuntimeException(e);
 
         } finally {
@@ -112,9 +110,9 @@ public class DoctorDaoImpl extends AbstractDao implements DoctorDao {
     }
 
     @Override
-    public Optional<Doctor> findById(Long id) {
+    public Optional<Appointment> findById(Long id) {
 
-        String sql = "SELECT * FROM doctors WHERE id=?";
+        String sql = "SELECT * FROM appointments WHERE id=?";
 
         Connection connection = getConnection();
 
@@ -131,7 +129,7 @@ public class DoctorDaoImpl extends AbstractDao implements DoctorDao {
             }
 
         } catch (SQLException e) {
-            LOGGER.error("Failed to find doctor id={}", id, e);
+            LOGGER.error("Failed to find appointment id={}", id, e);
             throw new RuntimeException(e);
 
         } finally {
@@ -142,25 +140,28 @@ public class DoctorDaoImpl extends AbstractDao implements DoctorDao {
     }
 
     @Override
-    public List<Doctor> findAll() {
+    public List<Appointment> findByPatientId(Long patientId) {
 
-        String sql = "SELECT * FROM doctors";
+        String sql = "SELECT * FROM appointments WHERE patients_id=?";
 
-        List<Doctor> list = new ArrayList<>();
+        List<Appointment> list = new ArrayList<>();
 
         Connection connection = getConnection();
 
         try (
-                PreparedStatement preparedStatement = connection.prepareStatement(sql);
-                ResultSet result = preparedStatement.executeQuery()
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
+
+            preparedStatement.setLong(1, patientId);
+
+            ResultSet result = preparedStatement.executeQuery();
 
             while (result.next()) {
                 list.add(mapRow(result));
             }
 
         } catch (SQLException e) {
-            LOGGER.error("Failed to find all doctors", e);
+            LOGGER.error("Failed to find appointments for patient id={}", patientId, e);
             throw new RuntimeException(e);
 
         } finally {
@@ -171,11 +172,11 @@ public class DoctorDaoImpl extends AbstractDao implements DoctorDao {
     }
 
     @Override
-    public List<Doctor> findByAvailability(boolean available) {
+    public List<Appointment> findByDoctorId(Long doctorId) {
 
-        String sql = "SELECT * FROM doctors WHERE available=?";
+        String sql = "SELECT * FROM appointments WHERE doctors_id=?";
 
-        List<Doctor> list = new ArrayList<>();
+        List<Appointment> list = new ArrayList<>();
 
         Connection connection = getConnection();
 
@@ -183,7 +184,7 @@ public class DoctorDaoImpl extends AbstractDao implements DoctorDao {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
-            preparedStatement.setBoolean(1, available);
+            preparedStatement.setLong(1, doctorId);
 
             ResultSet result = preparedStatement.executeQuery();
 
@@ -192,7 +193,7 @@ public class DoctorDaoImpl extends AbstractDao implements DoctorDao {
             }
 
         } catch (SQLException e) {
-            LOGGER.error("Failed to find doctors by availability", e);
+            LOGGER.error("Failed to find appointments for doctor id={}", doctorId, e);
             throw new RuntimeException(e);
 
         } finally {
@@ -202,20 +203,13 @@ public class DoctorDaoImpl extends AbstractDao implements DoctorDao {
         return list;
     }
 
-    private Doctor mapRow(ResultSet result) throws SQLException {
+    private Appointment mapRow(ResultSet result) throws SQLException {
 
-        Doctor doctor = new Doctor(
+        return new Appointment(
                 result.getLong("id"),
-                result.getString("first_name"),
-                result.getString("last_name"),
-                result.getString("specialization"),
-                result.getBoolean("available"),
-                null,
-                null
+                result.getTimestamp("scheduled_at").toLocalDateTime(),
+                Appointment.AppointmentStatus.valueOf(result.getString("status")),
+                result.getString("notes")
         );
-
-        doctor.setDepartmentId(result.getLong("departments_id"));
-
-        return doctor;
     }
 }

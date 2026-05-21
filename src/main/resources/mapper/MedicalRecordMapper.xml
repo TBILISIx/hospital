@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.hospital.dao.MedicalRecordDao">
+
+    <!-- ==================== ResultMap ==================== -->
+    <resultMap id="medicalRecordResultMap" type="MedicalRecord">
+        <id     property="id"          column="id"/>
+        <result property="createdDate" column="created_date"/>
+        <result property="bloodType"   column="blood_type"/>
+        <result property="notes"       column="notes"/>
+        <collection property="allergies"
+                    ofType="Allergy"
+                    select="selectAllergiesByMedicalRecordId"
+                    column="id"/>
+    </resultMap>
+
+    <resultMap id="allergyResultMap" type="Allergy">
+        <id     property="id"   column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <!-- helper select used by the collection above -->
+    <select id="selectAllergiesByMedicalRecordId"
+            parameterType="long"
+            resultMap="allergyResultMap">
+        SELECT * FROM allergies WHERE medical_records_id = #{medicalRecordId}
+    </select>
+
+    <!-- ==================== INSERT ==================== -->
+    <insert id="create" parameterType="map" useGeneratedKeys="true" keyProperty="medicalRecord.id">
+        INSERT INTO medical_records (created_date, blood_type, notes, patients_id)
+        VALUES (
+        #{medicalRecord.createdDate},
+        #{medicalRecord.bloodType},
+        #{medicalRecord.notes},
+        #{patientId}
+        )
+    </insert>
+
+    <!-- ==================== UPDATE ==================== -->
+    <update id="update" parameterType="MedicalRecord">
+        UPDATE medical_records
+        SET created_date = #{createdDate},
+        blood_type   = #{bloodType},
+        notes        = #{notes}
+        WHERE id = #{id}
+    </update>
+
+    <!-- ==================== DELETE ==================== -->
+    <delete id="delete" parameterType="long">
+        DELETE FROM medical_records WHERE id = #{id}
+    </delete>
+
+    <!-- ==================== SELECT ==================== -->
+    <select id="findById" parameterType="long" resultMap="medicalRecordResultMap">
+        SELECT * FROM medical_records WHERE id = #{id}
+    </select>
+
+    <select id="findByPatientId" parameterType="long" resultMap="medicalRecordResultMap">
+        SELECT * FROM medical_records WHERE patients_id = #{patientId}
+    </select>
+
+</mapper>

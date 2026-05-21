@@ -1,4 +1,4 @@
-package com.solvd.hospital.dao.impl;
+package com.solvd.hospital.dao.impl.jdbc;
 
 import com.solvd.hospital.dao.AbstractDao;
 import com.solvd.hospital.dao.PaymentDao;
@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class PaymentDaoImpl extends AbstractDao implements PaymentDao {
+public class JDBCPaymentDaoImpl extends AbstractDao implements PaymentDao {
 
-    private static final Logger LOGGER = LogManager.getLogger(PaymentDaoImpl.class);
+    private static final Logger LOGGER = LogManager.getLogger(JDBCPaymentDaoImpl.class);
 
     @Override
     public void create(Payment payment) {
