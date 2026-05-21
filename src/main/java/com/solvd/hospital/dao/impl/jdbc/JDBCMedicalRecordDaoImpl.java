@@ -1,4 +1,4 @@
-package com.solvd.hospital.dao.impl;
+package com.solvd.hospital.dao.impl.jdbc;
 
 import com.solvd.hospital.dao.AbstractDao;
 import com.solvd.hospital.dao.MedicalRecordDao;
@@ -10,9 +10,9 @@ import org.apache.logging.log4j.Logger;
 import java.sql.*;
 import java.util.Optional;
 
-public class MedicalRecordDaoImpl extends AbstractDao implements MedicalRecordDao {
+public class JDBCMedicalRecordDaoImpl extends AbstractDao implements MedicalRecordDao {
 
-    private static final Logger LOGGER = LogManager.getLogger(MedicalRecordDaoImpl.class);
+    private static final Logger LOGGER = LogManager.getLogger(JDBCMedicalRecordDaoImpl.class);
 
     @Override
     public void create(MedicalRecord record, Long patientId) {

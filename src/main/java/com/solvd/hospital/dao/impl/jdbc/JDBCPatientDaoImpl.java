@@ -1,4 +1,4 @@
-package com.solvd.hospital.dao.impl;
+package com.solvd.hospital.dao.impl.jdbc;
 
 import com.solvd.hospital.dao.AbstractDao;
 import com.solvd.hospital.dao.PatientDao;
@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class PatientDaoImpl extends AbstractDao implements PatientDao {
+public class JDBCPatientDaoImpl extends AbstractDao implements PatientDao {
 
-    private static final Logger LOGGER = LogManager.getLogger(PatientDaoImpl.class);
+    private static final Logger LOGGER = LogManager.getLogger(JDBCPatientDaoImpl.class);
 
     @Override
     public void create(Patient patient) {
