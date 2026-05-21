@@ -10,6 +10,11 @@ public class Prescription {
     private List<PrescriptionMedication> medications;
     private String instructions;
 
+
+    public Prescription() {
+        
+    }
+
     public Prescription(Long id, LocalDate issuedDate, List<PrescriptionMedication> medications, String instructions) {
         this.id = id;
         this.issuedDate = issuedDate;

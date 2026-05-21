@@ -28,7 +28,7 @@
     <select id="selectMedicationsByPrescriptionId"
             parameterType="long"
             resultMap="medicationResultMap">
-        SELECT * FROM prescription_medications WHERE prescriptions_id = #{prescriptionId}
+        SELECT * FROM prescription_medications WHERE prescriptions_id = #{value}
     </select>
 
     <!-- ==================== INSERT ==================== -->

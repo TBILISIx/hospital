@@ -15,6 +15,10 @@ public class Appointment {
     private AppointmentStatus status;
     private String notes;
 
+    public Appointment() {
+
+    }
+
 
     public Appointment(Long id, Long patientId, Doctor doctor, LocalDateTime scheduledAt, AppointmentStatus status, String notes) {
         this.id = id;

@@ -10,6 +10,9 @@ public class Admission {
     private String reason;
     private Payment payment;
 
+    public Admission() {
+    }
+
     public Admission(Long id, LocalDateTime admittedAt, LocalDateTime dischargedAt, String reason, Payment payment) {
         this.id = id;
         this.admittedAt = admittedAt;
