@@ -207,6 +207,8 @@ public class JDBCAppointmentDaoImpl extends AbstractDao implements AppointmentDa
 
         return new Appointment(
                 result.getLong("id"),
+                result.getLong("patients_id"),
+                null,
                 result.getTimestamp("scheduled_at").toLocalDateTime(),
                 Appointment.AppointmentStatus.valueOf(result.getString("status")),
                 result.getString("notes")

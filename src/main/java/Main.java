@@ -1,4 +1,5 @@
 import com.solvd.hospital.dao.impl.jdbc.*;
+import com.solvd.hospital.dao.impl.mybatis.*;
 import com.solvd.hospital.model.Patient;
 import com.solvd.hospital.service.*;
 import com.solvd.hospital.service.impl.*;
@@ -14,25 +15,25 @@ public class Main {
     public static void main(String[] args) {
 
         // build DAOs with JDBC
-        JDBCPatientDaoImpl patientDao = new JDBCPatientDaoImpl();
-        JDBCDoctorDaoImpl doctorDao = new JDBCDoctorDaoImpl();
-        JDBCAppointmentDaoImpl appointmentDao = new JDBCAppointmentDaoImpl();
-        JDBCAdmissionDaoImpl admissionDao = new JDBCAdmissionDaoImpl();
-        JDBCPrescriptionDaoImpl prescriptionDao = new JDBCPrescriptionDaoImpl();
-        JDBCMedicalRecordDaoImpl medicalRecordDao = new JDBCMedicalRecordDaoImpl();
-        JDBCPaymentDaoImpl paymentDao = new JDBCPaymentDaoImpl();
-        JDBCReportDaoImpl reportDao = new JDBCReportDaoImpl();
+//        JDBCPatientDaoImpl patientDao = new JDBCPatientDaoImpl();
+//        JDBCDoctorDaoImpl doctorDao = new JDBCDoctorDaoImpl();
+//        JDBCAppointmentDaoImpl appointmentDao = new JDBCAppointmentDaoImpl();
+//        JDBCAdmissionDaoImpl admissionDao = new JDBCAdmissionDaoImpl();
+//        JDBCPrescriptionDaoImpl prescriptionDao = new JDBCPrescriptionDaoImpl();
+//        JDBCMedicalRecordDaoImpl medicalRecordDao = new JDBCMedicalRecordDaoImpl();
+//        JDBCPaymentDaoImpl paymentDao = new JDBCPaymentDaoImpl();
+//        JDBCReportDaoImpl reportDao = new JDBCReportDaoImpl();
 
 
         // build DAOs with MyBatis
-//        MyBatisPatientDaoImpl patientDao = new MyBatisPatientDaoImpl();
-//        MyBatisDoctorDaoImpl doctorDao = new MyBatisDoctorDaoImpl();
-//        MyBatisAppointmentDaoImpl appointmentDao = new MyBatisAppointmentDaoImpl();
-//        MyBatisAdmissionDaoImpl admissionDao = new MyBatisAdmissionDaoImpl();
-//        MyBatisPrescriptionDaoImpl prescriptionDao = new MyBatisPrescriptionDaoImpl();
-//        MyBatisMedicalRecordDaoImpl medicalRecordDao = new MyBatisMedicalRecordDaoImpl();
-//        MyBatisPaymentDaoImpl paymentDao = new MyBatisPaymentDaoImpl();
-//        MyBatisReportDaoImpl reportDao = new MyBatisReportDaoImpl();
+        MyBatisPatientDaoImpl patientDao = new MyBatisPatientDaoImpl();
+        MyBatisDoctorDaoImpl doctorDao = new MyBatisDoctorDaoImpl();
+        MyBatisAppointmentDaoImpl appointmentDao = new MyBatisAppointmentDaoImpl();
+        MyBatisAdmissionDaoImpl admissionDao = new MyBatisAdmissionDaoImpl();
+        MyBatisPrescriptionDaoImpl prescriptionDao = new MyBatisPrescriptionDaoImpl();
+        MyBatisMedicalRecordDaoImpl medicalRecordDao = new MyBatisMedicalRecordDaoImpl();
+        MyBatisPaymentDaoImpl paymentDao = new MyBatisPaymentDaoImpl();
+        MyBatisReportDaoImpl reportDao = new MyBatisReportDaoImpl();
 
 
 
