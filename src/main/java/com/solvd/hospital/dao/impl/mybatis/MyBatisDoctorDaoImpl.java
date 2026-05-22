@@ -13,12 +13,11 @@ import java.util.Optional;
 public class MyBatisDoctorDaoImpl implements DoctorDao {
 
     private static final Logger LOGGER = LogManager.getLogger(MyBatisDoctorDaoImpl.class);
-    private static final String NAMESPACE = "com.solvd.hospital.dao.DoctorDao.";
 
     @Override
     public void create(Doctor doctor) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.insert(NAMESPACE + "create", doctor);
+            session.getMapper(DoctorDao.class).create(doctor);
             LOGGER.info("Created doctor id={}", doctor.getId());
         }
     }
@@ -26,7 +25,7 @@ public class MyBatisDoctorDaoImpl implements DoctorDao {
     @Override
     public void update(Doctor doctor) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.update(NAMESPACE + "update", doctor);
+            session.getMapper(DoctorDao.class).update(doctor);
             LOGGER.info("Updated doctor id={}", doctor.getId());
         }
     }
@@ -34,7 +33,7 @@ public class MyBatisDoctorDaoImpl implements DoctorDao {
     @Override
     public void delete(Long id) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.delete(NAMESPACE + "delete", id);
+            session.getMapper(DoctorDao.class).delete(id);
             LOGGER.info("Deleted doctor id={}", id);
         }
     }
@@ -42,22 +41,21 @@ public class MyBatisDoctorDaoImpl implements DoctorDao {
     @Override
     public Optional<Doctor> findById(Long id) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            Doctor doctor = session.selectOne(NAMESPACE + "findById", id);
-            return Optional.ofNullable(doctor);
+            return session.getMapper(DoctorDao.class).findById(id);
         }
     }
 
     @Override
     public List<Doctor> findAll() {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            return session.selectList(NAMESPACE + "findAll");
+            return session.getMapper(DoctorDao.class).findAll();
         }
     }
 
     @Override
     public List<Doctor> findByAvailability(boolean available) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            return session.selectList(NAMESPACE + "findByAvailability", available);
+            return session.getMapper(DoctorDao.class).findByAvailability(available);
         }
     }
 }

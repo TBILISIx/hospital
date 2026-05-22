@@ -12,12 +12,11 @@ import java.util.List;
 public class MyBatisReportDaoImpl implements ReportDao {
 
     private static final Logger LOGGER = LogManager.getLogger(MyBatisReportDaoImpl.class);
-    private static final String NAMESPACE = "com.solvd.hospital.dao.ReportDao.";
 
     @Override
     public List<Patient> findPatientsWithAdmissionDetails() {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            List<Patient> result = session.selectList(NAMESPACE + "findPatientsWithAdmissionDetails");
+            List<Patient> result = session.getMapper(ReportDao.class).findPatientsWithAdmissionDetails();
             LOGGER.info("Patient admission report: {} patients", result.size());
             return result;
         }

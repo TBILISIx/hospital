@@ -13,12 +13,11 @@ import java.util.Optional;
 public class MyBatisPaymentDaoImpl implements PaymentDao {
 
     private static final Logger LOGGER = LogManager.getLogger(MyBatisPaymentDaoImpl.class);
-    private static final String NAMESPACE = "com.solvd.hospital.dao.PaymentDao.";
 
     @Override
     public void create(Payment payment) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.insert(NAMESPACE + "create", payment);
+            session.getMapper(PaymentDao.class).create(payment);
             LOGGER.info("Created payment id={}", payment.getId());
         }
     }
@@ -26,7 +25,7 @@ public class MyBatisPaymentDaoImpl implements PaymentDao {
     @Override
     public void update(Payment payment) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.update(NAMESPACE + "update", payment);
+            session.getMapper(PaymentDao.class).update(payment);
             LOGGER.info("Updated payment id={}", payment.getId());
         }
     }
@@ -34,7 +33,7 @@ public class MyBatisPaymentDaoImpl implements PaymentDao {
     @Override
     public void delete(Long id) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.delete(NAMESPACE + "delete", id);
+            session.getMapper(PaymentDao.class).delete(id);
             LOGGER.info("Deleted payment id={}", id);
         }
     }
@@ -42,23 +41,21 @@ public class MyBatisPaymentDaoImpl implements PaymentDao {
     @Override
     public Optional<Payment> findById(Long id) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            Payment payment = session.selectOne(NAMESPACE + "findById", id);
-            return Optional.ofNullable(payment);
+            return session.getMapper(PaymentDao.class).findById(id);
         }
     }
 
     @Override
     public Optional<Payment> findByAdmissionId(Long admissionId) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            Payment payment = session.selectOne(NAMESPACE + "findByAdmissionId", admissionId);
-            return Optional.ofNullable(payment);
+            return session.getMapper(PaymentDao.class).findByAdmissionId(admissionId);
         }
     }
 
     @Override
     public List<Payment> findUnpaid() {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            return session.selectList(NAMESPACE + "findUnpaid");
+            return session.getMapper(PaymentDao.class).findUnpaid();
         }
     }
 }

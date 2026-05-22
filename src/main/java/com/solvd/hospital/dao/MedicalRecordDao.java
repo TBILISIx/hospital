@@ -1,12 +1,14 @@
 package com.solvd.hospital.dao;
 
 import com.solvd.hospital.model.MedicalRecord;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Optional;
 
 public interface MedicalRecordDao {
 
-    void create(MedicalRecord medicalRecord, Long patientId);
+    void create(@Param("medicalRecord") MedicalRecord medicalRecord,
+                @Param("patientId") Long patientId);
 
     void update(MedicalRecord medicalRecord);
 
@@ -15,5 +17,4 @@ public interface MedicalRecordDao {
     Optional<MedicalRecord> findById(Long id);
 
     Optional<MedicalRecord> findByPatientId(Long patientId);
-
 }

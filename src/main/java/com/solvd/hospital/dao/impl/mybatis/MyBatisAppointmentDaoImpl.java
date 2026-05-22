@@ -14,7 +14,6 @@ import java.util.Optional;
 public class MyBatisAppointmentDaoImpl implements AppointmentDao {
 
     private static final Logger LOGGER = LogManager.getLogger(MyBatisAppointmentDaoImpl.class);
-    private static final String NAMESPACE = "com.solvd.hospital.dao.AppointmentDao.";
 
     @Override
     public void create(Appointment appointment, Long patientId, Long doctorId) {
@@ -26,7 +25,7 @@ public class MyBatisAppointmentDaoImpl implements AppointmentDao {
             appointment.getDoctor().setId(doctorId);
         }
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.insert(NAMESPACE + "create", appointment);
+            session.getMapper(AppointmentDao.class).create(appointment, patientId, doctorId);
             LOGGER.info("Created appointment id={}", appointment.getId());
         }
     }
@@ -34,7 +33,7 @@ public class MyBatisAppointmentDaoImpl implements AppointmentDao {
     @Override
     public void update(Appointment appointment) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.update(NAMESPACE + "update", appointment);
+            session.getMapper(AppointmentDao.class).update(appointment);
             LOGGER.info("Updated appointment id={}", appointment.getId());
         }
     }
@@ -42,7 +41,7 @@ public class MyBatisAppointmentDaoImpl implements AppointmentDao {
     @Override
     public void delete(Long id) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.delete(NAMESPACE + "delete", id);
+            session.getMapper(AppointmentDao.class).delete(id);
             LOGGER.info("Deleted appointment id={}", id);
         }
     }
@@ -50,22 +49,21 @@ public class MyBatisAppointmentDaoImpl implements AppointmentDao {
     @Override
     public Optional<Appointment> findById(Long id) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            Appointment appointment = session.selectOne(NAMESPACE + "findById", id);
-            return Optional.ofNullable(appointment);
+            return session.getMapper(AppointmentDao.class).findById(id);
         }
     }
 
     @Override
     public List<Appointment> findByPatientId(Long patientId) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            return session.selectList(NAMESPACE + "findByPatientId", patientId);
+            return session.getMapper(AppointmentDao.class).findByPatientId(patientId);
         }
     }
 
     @Override
     public List<Appointment> findByDoctorId(Long doctorId) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            return session.selectList(NAMESPACE + "findByDoctorId", doctorId);
+            return session.getMapper(AppointmentDao.class).findByDoctorId(doctorId);
         }
     }
 }

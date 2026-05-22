@@ -13,12 +13,11 @@ import java.util.Optional;
 public class MyBatisPatientDaoImpl implements PatientDao {
 
     private static final Logger LOGGER = LogManager.getLogger(MyBatisPatientDaoImpl.class);
-    private static final String NAMESPACE = "com.solvd.hospital.dao.PatientDao.";
 
     @Override
     public void create(Patient patient) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.insert(NAMESPACE + "create", patient);
+            session.getMapper(PatientDao.class).create(patient);
             LOGGER.info("Created patient id={}", patient.getId());
         }
     }
@@ -26,7 +25,7 @@ public class MyBatisPatientDaoImpl implements PatientDao {
     @Override
     public void update(Patient patient) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.update(NAMESPACE + "update", patient);
+            session.getMapper(PatientDao.class).update(patient);
             LOGGER.info("Updated patient id={}", patient.getId());
         }
     }
@@ -34,7 +33,7 @@ public class MyBatisPatientDaoImpl implements PatientDao {
     @Override
     public void delete(Long id) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.delete(NAMESPACE + "delete", id);
+            session.getMapper(PatientDao.class).delete(id);
             LOGGER.info("Deleted patient id={}", id);
         }
     }
@@ -42,15 +41,14 @@ public class MyBatisPatientDaoImpl implements PatientDao {
     @Override
     public Optional<Patient> findById(Long id) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            Patient patient = session.selectOne(NAMESPACE + "findById", id);
-            return Optional.ofNullable(patient);
+            return session.getMapper(PatientDao.class).findById(id);
         }
     }
 
     @Override
     public List<Patient> findAll() {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            return session.selectList(NAMESPACE + "findAll");
+            return session.getMapper(PatientDao.class).findAll();
         }
     }
 }

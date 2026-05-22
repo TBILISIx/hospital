@@ -7,24 +7,17 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class MyBatisPrescriptionDaoImpl implements PrescriptionDao {
 
     private static final Logger LOGGER = LogManager.getLogger(MyBatisPrescriptionDaoImpl.class);
-    private static final String NAMESPACE = "com.solvd.hospital.dao.PrescriptionDao.";
 
     @Override
     public void create(Prescription prescription, Long doctorId, Long patientId) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("prescription", prescription);
-        params.put("doctorId", doctorId);
-        params.put("patientId", patientId);
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.insert(NAMESPACE + "create", params);
+            session.getMapper(PrescriptionDao.class).create(prescription, doctorId, patientId);
             LOGGER.info("Created prescription id={}", prescription.getId());
         }
     }
@@ -32,7 +25,7 @@ public class MyBatisPrescriptionDaoImpl implements PrescriptionDao {
     @Override
     public void update(Prescription prescription) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.update(NAMESPACE + "update", prescription);
+            session.getMapper(PrescriptionDao.class).update(prescription);
             LOGGER.info("Updated prescription id={}", prescription.getId());
         }
     }
@@ -40,7 +33,7 @@ public class MyBatisPrescriptionDaoImpl implements PrescriptionDao {
     @Override
     public void delete(Long id) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.delete(NAMESPACE + "delete", id);
+            session.getMapper(PrescriptionDao.class).delete(id);
             LOGGER.info("Deleted prescription id={}", id);
         }
     }
@@ -48,15 +41,14 @@ public class MyBatisPrescriptionDaoImpl implements PrescriptionDao {
     @Override
     public Optional<Prescription> findById(Long id) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            Prescription prescription = session.selectOne(NAMESPACE + "findById", id);
-            return Optional.ofNullable(prescription);
+            return session.getMapper(PrescriptionDao.class).findById(id);
         }
     }
 
     @Override
     public List<Prescription> findByPatientId(Long patientId) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            return session.selectList(NAMESPACE + "findByPatientId", patientId);
+            return session.getMapper(PrescriptionDao.class).findByPatientId(patientId);
         }
     }
 }

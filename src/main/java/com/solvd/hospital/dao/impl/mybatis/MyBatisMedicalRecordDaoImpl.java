@@ -7,22 +7,16 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 public class MyBatisMedicalRecordDaoImpl implements MedicalRecordDao {
 
     private static final Logger LOGGER = LogManager.getLogger(MyBatisMedicalRecordDaoImpl.class);
-    private static final String NAMESPACE = "com.solvd.hospital.dao.MedicalRecordDao.";
 
     @Override
     public void create(MedicalRecord medicalRecord, Long patientId) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("medicalRecord", medicalRecord);
-        params.put("patientId", patientId);
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.insert(NAMESPACE + "create", params);
+            session.getMapper(MedicalRecordDao.class).create(medicalRecord, patientId);
             LOGGER.info("Created medical record id={}", medicalRecord.getId());
         }
     }
@@ -30,7 +24,7 @@ public class MyBatisMedicalRecordDaoImpl implements MedicalRecordDao {
     @Override
     public void update(MedicalRecord medicalRecord) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.update(NAMESPACE + "update", medicalRecord);
+            session.getMapper(MedicalRecordDao.class).update(medicalRecord);
             LOGGER.info("Updated medical record id={}", medicalRecord.getId());
         }
     }
@@ -38,7 +32,7 @@ public class MyBatisMedicalRecordDaoImpl implements MedicalRecordDao {
     @Override
     public void delete(Long id) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            session.delete(NAMESPACE + "delete", id);
+            session.getMapper(MedicalRecordDao.class).delete(id);
             LOGGER.info("Deleted medical record id={}", id);
         }
     }
@@ -46,16 +40,14 @@ public class MyBatisMedicalRecordDaoImpl implements MedicalRecordDao {
     @Override
     public Optional<MedicalRecord> findById(Long id) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            MedicalRecord record = session.selectOne(NAMESPACE + "findById", id);
-            return Optional.ofNullable(record);
+            return session.getMapper(MedicalRecordDao.class).findById(id);
         }
     }
 
     @Override
     public Optional<MedicalRecord> findByPatientId(Long patientId) {
         try (SqlSession session = MyBatisSessionHolder.openSession()) {
-            MedicalRecord record = session.selectOne(NAMESPACE + "findByPatientId", patientId);
-            return Optional.ofNullable(record);
+            return session.getMapper(MedicalRecordDao.class).findByPatientId(patientId);
         }
     }
 }
