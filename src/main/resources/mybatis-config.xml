@@ -3,7 +3,7 @@
 
 <configuration>
 
-    <!-- Load credentials from the same config.properties used by JDBC -->
+    <!-- Load credentials from the onfig.properties -->
     <properties resource="config.properties"/>
 
     <settings>
@@ -12,7 +12,7 @@
         <setting name="useGeneratedKeys" value="true"/>
     </settings>
 
-    <!-- Model aliases so mappers can use short class names -->
+    <!-- Model aliases for mappers -->
     <typeAliases>
         <typeAlias alias="Patient"                 type="com.solvd.hospital.model.Patient"/>
         <typeAlias alias="Doctor"                  type="com.solvd.hospital.model.Doctor"/>

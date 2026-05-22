@@ -11,16 +11,10 @@
         <result property="admittedAt"   column="admitted_at"/>
         <result property="dischargedAt" column="discharged_at"/>
         <result property="reason"       column="reason"/>
-        <!-- payment is not loaded in basic queries; see ReportMapper for the joined version -->
     </resultMap>
 
     <!-- ==================== INSERT ==================== -->
-    <!--
-        roomId and patientId are stored directly on the Admission object when
-        calling the MyBatis impl (set before passing to the mapper).
-        We expose them as roomId / patientId properties via the wrapper map
-        in the impl class (see MyBatisAdmissionDaoImpl).
-    -->
+
     <insert id="create" parameterType="map" useGeneratedKeys="true" keyProperty="admission.id">
         INSERT INTO admissions (admitted_at, discharged_at, reason, rooms_id, patients_id)
         VALUES (

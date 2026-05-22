@@ -1,12 +1,13 @@
 package com.solvd.hospital.service;
 
 import com.solvd.hospital.model.Appointment;
+import com.solvd.hospital.model.Doctor;
 
 import java.util.List;
 
 public interface AppointmentService {
 
-    Appointment bookAppointment(Appointment appointment, Long patientId, Long doctorId);
+    Appointment bookAppointment(Appointment appointment);
 
     void updateAppointment(Appointment appointment);
 

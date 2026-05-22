@@ -1,6 +1,7 @@
 package com.solvd.hospital.service.impl;
 
 import com.solvd.hospital.dao.AppointmentDao;
+import com.solvd.hospital.dao.impl.mybatis.MyBatisAppointmentDaoImpl;
 import com.solvd.hospital.model.Appointment;
 import com.solvd.hospital.model.Appointment.AppointmentStatus;
 import com.solvd.hospital.model.Doctor;
@@ -15,21 +16,18 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     private static final Logger LOGGER = LogManager.getLogger(AppointmentServiceImpl.class);
 
-    private final AppointmentDao appointmentDao;
-    private final DoctorService doctorService;
+    private final AppointmentDao appointmentDao = new MyBatisAppointmentDaoImpl();
 
-    public AppointmentServiceImpl(AppointmentDao appointmentDao, DoctorService doctorService) {
-        this.appointmentDao = appointmentDao;
-        this.doctorService = doctorService;
-    }
+
 
     @Override
-    public Appointment bookAppointment(Appointment appointment, Long patientId, Long doctorId) {
+    public Appointment bookAppointment(Appointment appointment) {
 
-        Doctor doctor = doctorService.getDoctorById(doctorId);
+    var doctor = appointment.getDoctor();
+    var patientId = appointment.getPatientID();
 
         if (!doctor.isAvailable()) {
-            throw new RuntimeException("Doctor id=" + doctorId + " is not available");
+            throw new RuntimeException("Doctor Id=" + doctor.getId() + " is not available");
         }
 
         if (appointment.getScheduledAt() == null) {
@@ -40,13 +38,13 @@ public class AppointmentServiceImpl implements AppointmentService {
             appointment.setStatus(AppointmentStatus.SCHEDULED);
         }
 
-        appointmentDao.create(appointment, patientId, doctorId);
+        appointmentDao.create(appointment, patientId, doctor.getId());
 
         LOGGER.info(
                 "Booked appointment id={} patient={} doctor={}",
                 appointment.getId(),
                 patientId,
-                doctorId
+                doctor.getId()
         );
 
         return appointment;

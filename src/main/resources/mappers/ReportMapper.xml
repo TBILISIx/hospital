@@ -5,16 +5,6 @@
 
 <mapper namespace="com.solvd.hospital.dao.ReportDao">
 
-    <!--
-        =====================================================================
-        Full nested resultMap:
-          Patient → MedicalRecord → List<Allergy>
-                  → Admission     → Payment
-        =====================================================================
-        MyBatis de-duplicates the Patient and MedicalRecord rows automatically
-        because we declare <id> elements on both.  Allergy rows with the same
-        patient/record are collected into the allergies list.
-    -->
 
     <resultMap id="reportResultMap" type="Patient">
         <id     property="id"          column="patient_id"/>
@@ -28,7 +18,7 @@
         <association property="medicalRecord" javaType="MedicalRecord"
                      resultMap="medicalRecordInReport"/>
 
-        <!-- Single active Admission (the most recent one without discharge) -->
+        <!-- Single active Admission  -->
         <association property="admission" javaType="Admission"
                      resultMap="admissionInReport"/>
     </resultMap>
@@ -62,17 +52,6 @@
         <result property="paid"        column="paid"/>
     </resultMap>
 
-    <!--
-        =====================================================================
-        The query joins:
-          1. patients
-          2. admissions      (INNER – only patients who have been admitted)
-          3. payments        (LEFT  – admission may not have a payment yet)
-          4. medical_records (LEFT  – patient may not have a record yet)
-          5. allergies       (LEFT  – record may have zero allergies)
-        That is 5 joins in total, satisfying the requirement.
-        =====================================================================
-    -->
     <select id="findPatientsWithAdmissionDetails" resultMap="reportResultMap">
         SELECT
         p.id            AS patient_id,

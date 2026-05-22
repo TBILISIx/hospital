@@ -10,7 +10,7 @@
         <id     property="id"           column="id"/>
         <result property="issuedDate"   column="issued_date"/>
         <result property="instructions" column="instructions"/>
-        <!-- medications are fetched via a nested select to keep mapping clean -->
+
         <collection property="medications"
                     ofType="PrescriptionMedication"
                     select="selectMedicationsByPrescriptionId"

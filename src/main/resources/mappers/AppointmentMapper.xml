@@ -6,11 +6,7 @@
 <mapper namespace="com.solvd.hospital.dao.AppointmentDao">
 
     <!-- ==================== ResultMap ==================== -->
-    <!--
-        The Appointment model holds a Doctor object, but the appointment table only
-        stores doctors_id. We map the FK into a nested Doctor with just its id set
-        so that the service layer can lazy-load or ignore it as needed.
-    -->
+
     <resultMap id="appointmentResultMap" type="Appointment">
         <id     property="id"          column="id"/>
         <result property="patientID"   column="patients_id"/>
@@ -23,11 +19,7 @@
     </resultMap>
 
     <!-- ==================== INSERT ==================== -->
-    <!--
-        The JDBC impl accepts patientId + doctorId as separate params.
-        Here we embed them directly on the Appointment object
-        (patientID and doctor.id) so a single parameter object suffices.
-    -->
+
     <insert id="create" parameterType="Appointment" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO appointments (scheduled_at, status, notes, doctors_id, patients_id)
         VALUES (#{scheduledAt}, #{status}, #{notes}, #{doctor.id}, #{patientID})

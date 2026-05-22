@@ -12,6 +12,21 @@ public class Main {
 
     private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
+    private static final PatientService patientService = new PatientServiceImpl(new MyBatisPatientDaoImpl());
+    private static final DoctorService doctorService = new DoctorServiceImpl(new MyBatisDoctorDaoImpl());
+    private static final PrescriptionService prescriptionService = new PrescriptionServiceImpl(new MyBatisPrescriptionDaoImpl());
+
+    private static final AdmissionService admissionService = new AdmissionServiceImpl(new MyBatisAdmissionDaoImpl());
+
+    private static final PaymentService paymentService = new PaymentServiceImpl(new MyBatisPaymentDaoImpl());
+
+    private static final ReportService reportService = new ReportServiceImpl(new MyBatisReportDaoImpl());
+
+
+    // in this service i am providing sql code directly into servicelayerimplementation and this is better practice rather than feeding class in main.
+
+    private static final AppointmentService appointmentService = new AppointmentServiceImpl();
+
     public static void main(String[] args) {
 
         // build DAOs with JDBC
@@ -24,32 +39,6 @@ public class Main {
 //        JDBCPaymentDaoImpl paymentDao = new JDBCPaymentDaoImpl();
 //        JDBCReportDaoImpl reportDao = new JDBCReportDaoImpl();
 
-
-        // build DAOs with MyBatis
-        MyBatisPatientDaoImpl patientDao = new MyBatisPatientDaoImpl();
-        MyBatisDoctorDaoImpl doctorDao = new MyBatisDoctorDaoImpl();
-        MyBatisAppointmentDaoImpl appointmentDao = new MyBatisAppointmentDaoImpl();
-        MyBatisAdmissionDaoImpl admissionDao = new MyBatisAdmissionDaoImpl();
-        MyBatisPrescriptionDaoImpl prescriptionDao = new MyBatisPrescriptionDaoImpl();
-        MyBatisMedicalRecordDaoImpl medicalRecordDao = new MyBatisMedicalRecordDaoImpl();
-        MyBatisPaymentDaoImpl paymentDao = new MyBatisPaymentDaoImpl();
-        MyBatisReportDaoImpl reportDao = new MyBatisReportDaoImpl();
-
-
-
-
-        // build services
-        PatientService patientService = new PatientServiceImpl(patientDao);
-        DoctorService doctorService = new DoctorServiceImpl(doctorDao);
-        PrescriptionService prescriptionService = new PrescriptionServiceImpl(prescriptionDao);
-
-        AdmissionService admissionService = new AdmissionServiceImpl(admissionDao);
-
-        PaymentService paymentService = new PaymentServiceImpl(paymentDao);
-
-        ReportService reportService = new ReportServiceImpl(reportDao);
-
-        AppointmentService appointmentService = new AppointmentServiceImpl(appointmentDao, doctorService);
 
         LOGGER.info("--- All patients ---");
 
@@ -140,11 +129,13 @@ public class Main {
                     );
                 }
             }
+
         });
 
         // close connection pool
 
         // in case of MyBatis this is not needed its done in mybatis-config
 //        ConnectionPool.getInstance().close();
+
     }
 }
