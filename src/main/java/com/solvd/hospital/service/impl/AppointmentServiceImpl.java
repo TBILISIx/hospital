@@ -1,12 +1,9 @@
 package com.solvd.hospital.service.impl;
 
 import com.solvd.hospital.dao.AppointmentDao;
-import com.solvd.hospital.dao.impl.mybatis.MyBatisAppointmentDaoImpl;
 import com.solvd.hospital.model.Appointment;
 import com.solvd.hospital.model.Appointment.AppointmentStatus;
-import com.solvd.hospital.model.Doctor;
 import com.solvd.hospital.service.AppointmentService;
-import com.solvd.hospital.service.DoctorService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,18 +13,20 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     private static final Logger LOGGER = LogManager.getLogger(AppointmentServiceImpl.class);
 
-    private final AppointmentDao appointmentDao = new MyBatisAppointmentDaoImpl();
+    private final AppointmentDao appointmentDao;
 
-
+    public AppointmentServiceImpl(AppointmentDao appointmentDao) {
+        this.appointmentDao = appointmentDao;
+    }
 
     @Override
     public Appointment bookAppointment(Appointment appointment) {
 
-    var doctor = appointment.getDoctor();
-    var patientId = appointment.getPatientID();
+        var doctor    = appointment.getDoctor();
+        var patientId = appointment.getPatientID();
 
         if (!doctor.isAvailable()) {
-            throw new RuntimeException("Doctor Id=" + doctor.getId() + " is not available");
+            throw new RuntimeException("Doctor id=" + doctor.getId() + " is not available");
         }
 
         if (appointment.getScheduledAt() == null) {
@@ -97,4 +96,5 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<Appointment> getAppointmentsForDoctor(Long doctorId) {
         return appointmentDao.findByDoctorId(doctorId);
     }
+
 }
