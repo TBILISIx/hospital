@@ -17,6 +17,7 @@
         <commons-io-version>2.21.0</commons-io-version>
         <mysql-connector-version>8.3.0</mysql-connector-version>
         <mybatis-version>3.5.19</mybatis-version>
+        <testng-version>7.12.0</testng-version>
     </properties>
 
     <dependencies>
@@ -60,6 +61,14 @@
             <artifactId>mybatis</artifactId>
             <version>${mybatis-version}</version>
             <scope>compile</scope>
+        </dependency>
+
+        <!--  Testng -> Source: https://mvnrepository.com/artifact/org.testng/testng -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng-version}</version>
+            <scope>test</scope>
         </dependency>
 
 
