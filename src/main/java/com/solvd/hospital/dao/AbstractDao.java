@@ -1,6 +1,6 @@
 package com.solvd.hospital.dao;
 
-import com.solvd.hospital.ConnectionPool;
+import com.solvd.hospital.util.ConnectionPool;
 
 import java.sql.Connection;
 

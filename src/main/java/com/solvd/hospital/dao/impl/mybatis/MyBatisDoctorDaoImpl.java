@@ -1,6 +1,6 @@
 package com.solvd.hospital.dao.impl.mybatis;
 
-import com.solvd.hospital.MyBatisSessionHolder;
+import com.solvd.hospital.util.MyBatisSessionHolder;
 import com.solvd.hospital.dao.DoctorDao;
 import com.solvd.hospital.model.Doctor;
 import org.apache.ibatis.session.SqlSession;

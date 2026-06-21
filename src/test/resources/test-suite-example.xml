@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Suite name="Auth Suite" parallel="methods" thread-count="10">
+
+    <!-- <listeners> -->
+    <!--    <listener class-name="com.solvd.hospital.listener.TestNGListener"/> -->
+    <!-- </listeners> -->
+
+    <!-- =========================
+         OVERALL CLASS TESTS
+         Runs all tests in a class
+         ========================= -->
+    <test name="OverallClassTests">
+        <classes>
+            <class name="com.example.tests.UserServiceTest"/>
+            <class name="com.example.tests.OrderServiceTest"/>
+        </classes>
+    </test>
+
+    <!-- =========================
+         INCLUDE ONLY SPECIFIC TEST METHODS
+         ========================= -->
+    <test name="IncludeSpecificTests">
+        <classes>
+            <class name="com.example.tests.UserServiceTest">
+                <methods>
+                    <include name="testCreateUser"/>
+                    <include name="testDeleteUser"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- =========================
+         EXCLUDE SPECIFIC TEST METHODS
+         ========================= -->
+    <test name="ExcludeSpecificTests">
+        <classes>
+            <class name="com.example.tests.OrderServiceTest">
+                <methods>
+                    <exclude name="testPaymentGatewayTimeout"/>
+                    <exclude name="testInvalidCouponCode"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- =========================
+         MIXED INCLUDE + EXCLUDE
+         ========================= -->
+    <test name="MixedIncludeExclude">
+        <classes>
+            <class name="com.example.tests.InventoryTest">
+                <methods>
+                    <include name="testAddItem"/>
+                    <include name="testRemoveItem"/>
+                    <exclude name="testDatabaseFailure"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</Suite>

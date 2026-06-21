@@ -1,4 +1,4 @@
-package com.solvd.hospital;
+package com.solvd.hospital.util;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
