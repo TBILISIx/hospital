@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="People Management Suite" verbose="1">
+
+    <!-- <listeners> -->
+    <!--    <listener class-name="com.solvd.hospital.listener.TestNGListener"/> -->
+    <!-- </listeners> -->
+
+    <!-- PATIENT SERVICE TESTS -->
+    <test name="Patient Service Tests">
+        <classes>
+            <class name="com.solvd.hospital.service.PatientServiceImplTest"/>
+        </classes>
+    </test>
+
+    <!-- DOCTOR SERVICE TESTS -->
+    <test name="Doctor Service Tests">
+        <classes>
+            <class name="com.solvd.hospital.service.DoctorServiceImplTest"/>
+        </classes>
+    </test>
+
+</suite>

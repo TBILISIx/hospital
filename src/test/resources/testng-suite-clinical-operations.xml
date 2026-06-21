@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="Clinical Operations Suite" verbose="1">
+
+    <!-- <listeners> -->
+    <!--    <listener class-name="com.solvd.hospital.listener.TestNGListener"/> -->
+    <!-- </listeners> -->
+
+    <!-- ADMISSION SERVICE TESTS -->
+    <test name="Admission Service Tests">
+        <classes>
+            <class name="com.solvd.hospital.service.AdmissionServiceImplTest"/>
+        </classes>
+    </test>
+
+    <!--  PRESCRIPTION SERVICE TESTS -->
+    <test name="Prescription Service Tests">
+        <classes>
+            <class name="com.solvd.hospital.service.PrescriptionServiceImplTest"/>
+        </classes>
+    </test>
+
+    <!--  PAYMENT SERVICE TESTS -->
+    <test name="Payment Service Tests">
+        <classes>
+            <class name="com.solvd.hospital.service.PaymentServiceImplTest"/>
+        </classes>
+    </test>
+
+</suite>
