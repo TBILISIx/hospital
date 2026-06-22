@@ -3,20 +3,15 @@ package com.solvd.hospital.testfakes;
 import com.solvd.hospital.dao.AdmissionDao;
 import com.solvd.hospital.model.Admission;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 /**
- * In-memory test double for AdmissionDao.
- * Lets us unit test AdmissionServiceImpl without a real database or MyBatis.
- * Tracks the patientId link separately, the same way the real schema does
- * (Admission itself doesn't hold a patientId field).
+ * in memory test double for AdmissionDao.
+ * lets me to unit test AdmissionServiceImpl without a real database or MyBatis and mutating real data.
  */
+
 public class FakeAdmissionDao implements AdmissionDao {
 
     private final Map<Long, Admission> store = new LinkedHashMap<>();
@@ -59,4 +54,5 @@ public class FakeAdmissionDao implements AdmissionDao {
                 .filter(a -> a.getDischargedAt() == null)
                 .collect(Collectors.toList());
     }
+
 }

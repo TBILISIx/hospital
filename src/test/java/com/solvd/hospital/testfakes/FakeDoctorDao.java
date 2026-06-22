@@ -3,18 +3,10 @@ package com.solvd.hospital.testfakes;
 import com.solvd.hospital.dao.DoctorDao;
 import com.solvd.hospital.model.Doctor;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-/**
- * In-memory test double for DoctorDao.
- * Lets us unit test DoctorServiceImpl without a real database or MyBatis.
- */
 public class FakeDoctorDao implements DoctorDao {
 
     private final Map<Long, Doctor> store = new LinkedHashMap<>();
@@ -52,4 +44,5 @@ public class FakeDoctorDao implements DoctorDao {
                 .filter(d -> d.isAvailable() == available)
                 .collect(Collectors.toList());
     }
+
 }

@@ -10,10 +10,6 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-/**
- * In-memory test double for PaymentDao.
- * Lets us unit test PaymentServiceImpl without a real database or MyBatis.
- */
 public class FakePaymentDao implements PaymentDao {
 
     private final Map<Long, Payment> store = new LinkedHashMap<>();
@@ -53,4 +49,5 @@ public class FakePaymentDao implements PaymentDao {
                 .filter(p -> !p.isPaid())
                 .collect(Collectors.toList());
     }
+
 }
