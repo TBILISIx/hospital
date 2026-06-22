@@ -3,18 +3,10 @@ package com.solvd.hospital.testfakes;
 import com.solvd.hospital.dao.PrescriptionDao;
 import com.solvd.hospital.model.Prescription;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-/**
- * In-memory test double for PrescriptionDao.
- * Lets us unit test PrescriptionServiceImpl without a real database or MyBatis.
- */
 public class FakePrescriptionDao implements PrescriptionDao {
 
     private final Map<Long, Prescription> store = new LinkedHashMap<>();
@@ -50,4 +42,5 @@ public class FakePrescriptionDao implements PrescriptionDao {
                 .filter(p -> patientId.equals(patientLinks.get(p.getId())))
                 .collect(Collectors.toList());
     }
+
 }

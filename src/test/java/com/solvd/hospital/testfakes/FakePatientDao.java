@@ -3,17 +3,9 @@ package com.solvd.hospital.testfakes;
 import com.solvd.hospital.dao.PatientDao;
 import com.solvd.hospital.model.Patient;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * In-memory test double for PatientDao.
- * Lets us unit test PatientServiceImpl without a real database or MyBatis.
- */
 public class FakePatientDao implements PatientDao {
 
     private final Map<Long, Patient> store = new LinkedHashMap<>();
@@ -63,4 +55,5 @@ public class FakePatientDao implements PatientDao {
     public int getDeleteCallCount() {
         return deleteCallCount;
     }
+
 }

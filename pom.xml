@@ -98,7 +98,9 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng-suite-people.xml</suiteXmlFile>
                         <suiteXmlFile>src/test/resources/testng-suite-clinical-operations.xml</suiteXmlFile>
+<!--<suiteXmlFile>${suiteXmlFile}</suiteXmlFile>  // mvn test -DsuiteXmlFile=src/test/resources/testng-suite-people.xml -->
                     </suiteXmlFiles>
+
                 </configuration>
             </plugin>
 
