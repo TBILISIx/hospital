@@ -19,7 +19,6 @@ public class PrescriptionServiceImplTest {
     private FakePrescriptionDao prescriptionDao;
     private PrescriptionServiceImpl prescriptionService;
 
-    //  CLASS LEVEL 
     @BeforeClass
     public void beforeClass() {
         LOGGER.info("--- Starting test class: {} ---", getClass().getSimpleName());
@@ -30,7 +29,6 @@ public class PrescriptionServiceImplTest {
         LOGGER.info("--- Finished test class: {} ---", getClass().getSimpleName());
     }
 
-    //  METHOD LEVEL 
     @BeforeMethod
     public void setUp() {
         prescriptionDao = new FakePrescriptionDao();
@@ -48,68 +46,67 @@ public class PrescriptionServiceImplTest {
         return prescription;
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testIssuePrescription_NullDoctorId_ThrowsException() {
+    @Test(expectedExceptions = IllegalArgumentException.class, description = "A null doctorId must be rejected with IllegalArgumentException")
+    public void testIssuePrescriptionNullDoctorIdThrowsException() {
         prescriptionService.issuePrescription(validPrescription(), null, 2L);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testIssuePrescription_NullPatientId_ThrowsException() {
+    @Test(expectedExceptions = IllegalArgumentException.class, description = "A null patientId must be rejected with IllegalArgumentException")
+    public void testIssuePrescriptionNullPatientIdThrowsException() {
         prescriptionService.issuePrescription(validPrescription(), 1L, null);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testUpdatePrescription_NullId_ThrowsException() {
+    @Test(expectedExceptions = IllegalArgumentException.class, description = "Updating a prescription without an id must throw IllegalArgumentException")
+    public void testUpdatePrescriptionNullIdThrowsException() {
         prescriptionService.updatePrescription(validPrescription());
     }
 
     @Test
-    public void testIssuePrescription_SetsIssuedDateWhenMissing() {
+    public void testIssuePrescriptionSetsIssuedDateWhenMissing() {
         Prescription result = prescriptionService.issuePrescription(validPrescription(), 1L, 2L);
 
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertNotNull(result.getId());
-        softAssert.assertEquals(result.getIssuedDate(), LocalDate.now());
-        softAssert.assertEquals(result.getInstructions(), "Take with food");
+        softAssert.assertNotNull(result.getId(), "An id must be assigned after the prescription is issued");
+        softAssert.assertEquals(result.getIssuedDate(), LocalDate.now(), "issuedDate must default to today when not explicitly provided");
+        softAssert.assertEquals(result.getInstructions(), "Take with food", "Instructions must be preserved after issuance");
         softAssert.assertAll();
     }
 
     @Test
-    public void testIssuePrescription_KeepsExplicitIssuedDate() {
+    public void testIssuePrescriptionKeepsExplicitIssuedDate() {
         Prescription prescription = validPrescription();
         LocalDate fixedDate = LocalDate.of(2025, 5, 5);
         prescription.setIssuedDate(fixedDate);
 
         Prescription result = prescriptionService.issuePrescription(prescription, 1L, 2L);
 
-        Assert.assertEquals(result.getIssuedDate(), fixedDate);
+        Assert.assertEquals(result.getIssuedDate(), fixedDate, "An explicitly provided issuedDate must not be overwritten by the service");
     }
 
     @Test
-    public void testDeletePrescription_RemovesFromStore() {
+    public void testDeletePrescriptionRemovesFromStore() {
         Prescription prescription = prescriptionService.issuePrescription(validPrescription(), 1L, 2L);
 
         prescriptionService.deletePrescription(prescription.getId());
 
-        Assert.assertThrows(RuntimeException.class,
-                () -> prescriptionService.getPrescriptionById(prescription.getId()));
+        Assert.assertThrows(RuntimeException.class, () -> prescriptionService.getPrescriptionById(prescription.getId()));
     }
 
-    @Test(expectedExceptions = RuntimeException.class)
-    public void testGetPrescriptionById_NotFound_ThrowsException() {
+    @Test(expectedExceptions = RuntimeException.class, description = "Looking up a non-existent prescription id must throw RuntimeException")
+    public void testGetPrescriptionByIdNotFoundThrowsException() {
         prescriptionService.getPrescriptionById(999L);
     }
 
     @Test
-    public void testGetPrescriptionsForPatient_ReturnsOnlyMatching() {
+    public void testGetPrescriptionsForPatientReturnsOnlyMatching() {
         prescriptionService.issuePrescription(validPrescription(), 1L, 2L);
         prescriptionService.issuePrescription(validPrescription(), 1L, 3L);
 
         List<Prescription> result = prescriptionService.getPrescriptionsForPatient(2L);
 
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(result.size(), 1);
-        softAssert.assertEquals(result.get(0).getInstructions(), "Take with food");
+        softAssert.assertEquals(result.size(), 1, "Only prescriptions belonging to patient id=2 should be returned");
+        softAssert.assertEquals(result.get(0).getInstructions(), "Take with food", "The returned prescription must carry the correct instructions");
         softAssert.assertAll();
     }
 

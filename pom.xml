@@ -19,6 +19,11 @@
         <mybatis-version>3.5.19</mybatis-version>
         <testng-version>7.12.0</testng-version>
         <surefire-version>3.5.6</surefire-version>
+
+        <!-- Default suite to run. Override in the command line for example like this :
+             mvn test -DsuiteXmlFile=src/test/resources/testng-suite-clinical-operations.xml -->
+        <suiteXmlFile>src/test/resources/testng-suite-people.xml</suiteXmlFile>
+
     </properties>
 
     <dependencies>
@@ -64,7 +69,7 @@
             <scope>compile</scope>
         </dependency>
 
-        <!--  Testng -> Source: https://mvnrepository.com/artifact/org.testng/testng -->
+        <!--  TestNG -> Source: https://mvnrepository.com/artifact/org.testng/testng -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
@@ -77,6 +82,7 @@
 
     <build>
         <plugins>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -96,17 +102,17 @@
 
                 <configuration>
                     <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/testng-suite-people.xml</suiteXmlFile>
-                        <suiteXmlFile>src/test/resources/testng-suite-clinical-operations.xml</suiteXmlFile>
-<!--<suiteXmlFile>${suiteXmlFile}</suiteXmlFile>  // mvn test -DsuiteXmlFile=src/test/resources/testng-suite-people.xml -->
+<!--                        <suiteXmlFile>src/test/resources/testng-suite-people.xml</suiteXmlFile>-->
+<!--                        <suiteXmlFile>src/test/resources/testng-suite-clinical-operations.xml</suiteXmlFile>-->
+                        <suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
+
                     </suiteXmlFiles>
 
                 </configuration>
+
             </plugin>
 
-
         </plugins>
-
 
     </build>
 
