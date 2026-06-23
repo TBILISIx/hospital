@@ -3,9 +3,9 @@
 
 <suite name="Clinical Operations Suite" verbose="1">
 
-    <!-- <listeners> -->
-    <!--    <listener class-name="com.solvd.hospital.listener.TestNGListener"/> -->
-    <!-- </listeners> -->
+    <listeners>
+        <listener class-name="com.solvd.hospital.listener.TestNGListener"/>
+    </listeners>
 
     <!-- ADMISSION SERVICE TESTS -->
     <test name="Admission Service Tests">
