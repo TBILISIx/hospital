@@ -19,9 +19,6 @@ public class PatientServiceImplTest {
     private FakePatientDao patientDao;
     private PatientServiceImpl patientService;
 
-    //  SUITE LEVEL
-    // runs exactly ONCE, before any class in that suite starts.
-
     @BeforeSuite(alwaysRun = true)
     public void beforeSuite() {
         LOGGER.info("===== People Management Suite STARTED =====");
@@ -32,7 +29,6 @@ public class PatientServiceImplTest {
         LOGGER.info("===== People Management Suite FINISHED =====");
     }
 
-    //  CLASS LEVEL
     @BeforeClass
     public void beforeClass() {
         LOGGER.info("--- Starting test class: {} ---", getClass().getSimpleName());
@@ -43,7 +39,6 @@ public class PatientServiceImplTest {
         LOGGER.info("--- Finished test class: {} ---", getClass().getSimpleName());
     }
 
-    //  METHOD LEVEL
     @BeforeMethod
     public void setUp() {
         patientDao = new FakePatientDao();
@@ -65,16 +60,16 @@ public class PatientServiceImplTest {
         return patient;
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testRegisterPatient_BlankFirstName_ThrowsException() {
+    @Test(expectedExceptions = IllegalArgumentException.class, description = "A blank first name must be rejected")
+    public void testRegisterPatientBlankFirstNameThrowsException() {
         Patient patient = validPatient();
         patient.setFirstName("  ");
 
         patientService.registerPatient(patient);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testRegisterPatient_BlankLastName_ThrowsException() {
+    @Test(expectedExceptions = IllegalArgumentException.class, description = "A blank last name must be rejected")
+    public void testRegisterPatientBlankLastNameThrowsException() {
         Patient patient = validPatient();
         patient.setLastName("");
 
@@ -82,20 +77,20 @@ public class PatientServiceImplTest {
     }
 
     @Test
-    public void testRegisterPatient_AssignsIdAndPersists() {
+    public void testRegisterPatientAssignsIdAndPersists() {
         Patient result = patientService.registerPatient(validPatient());
 
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertNotNull(result.getId(), "Id should be assigned after registration");
-        softAssert.assertEquals(result.getFirstName(), "Nino");
-        softAssert.assertEquals(result.getLastName(), "Gelashvili");
-        softAssert.assertTrue(result.isInsured());
-        softAssert.assertEquals(patientDao.getCreateCallCount(), 1, "DAO create should be called exactly once");
+        softAssert.assertNotNull(result.getId(), "An id must be assigned to the patient after registration");
+        softAssert.assertEquals(result.getFirstName(), "Nino", "First name must be preserved after registration");
+        softAssert.assertEquals(result.getLastName(), "Gelashvili", "Last name must be preserved after registration");
+        softAssert.assertTrue(result.isInsured(), "Insured flag must be preserved after registration");
+        softAssert.assertEquals(patientDao.getCreateCallCount(), 1, "DAO create() must be called exactly once during registration");
         softAssert.assertAll();
     }
 
     @Test
-    public void testRegisterPatient_InvalidInput_DoesNotCallDao() {
+    public void testRegisterPatientInvalidInputDoesNotCallDao() {
         Patient patient = validPatient();
         patient.setFirstName(null);
 
@@ -103,13 +98,12 @@ public class PatientServiceImplTest {
             patientService.registerPatient(patient);
             Assert.fail("Expected IllegalArgumentException was not thrown");
         } catch (IllegalArgumentException e) {
-            Assert.assertEquals(patientDao.getCreateCallCount(), 0,
-                    "DAO create should never be called when validation fails");
+            Assert.assertEquals(patientDao.getCreateCallCount(), 0, "DAO create should never be called when validation fails");
         }
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testUpdatePatient_NullId_ThrowsException() {
+    public void testUpdatePatientNullIdThrowsException() {
         Patient patient = validPatient();
         patient.setId(null);
 
@@ -117,33 +111,32 @@ public class PatientServiceImplTest {
     }
 
     @Test
-    public void testUpdatePatient_Success_ChangesPersist() {
+    public void testUpdatePatientSuccessChangesPersist() {
         Patient registered = patientService.registerPatient(validPatient());
         registered.setPhoneNumber("+995 555 99 88 77");
 
         patientService.updatePatient(registered);
 
         Patient fetched = patientService.getPatientById(registered.getId());
-        Assert.assertEquals(fetched.getPhoneNumber(), "+995 555 99 88 77");
+        Assert.assertEquals(fetched.getPhoneNumber(), "+995 555 99 88 77", "Updated phone number must be persisted and returned on the next fetch");
     }
 
     @Test
-    public void testRemovePatient_RemovesFromStore() {
+    public void testRemovePatientRemovesFromStore() {
         Patient registered = patientService.registerPatient(validPatient());
 
         patientService.removePatient(registered.getId());
 
-        Assert.assertThrows(RuntimeException.class,
-                () -> patientService.getPatientById(registered.getId()));
+        Assert.assertThrows(RuntimeException.class, () -> patientService.getPatientById(registered.getId()));
     }
 
-    @Test(expectedExceptions = RuntimeException.class)
-    public void testGetPatientById_NotFound_ThrowsException() {
+    @Test(expectedExceptions = RuntimeException.class, description = "Looking up a non-existent patient id must throw RuntimeException")
+    public void testGetPatientByIdNotFoundThrowsException() {
         patientService.getPatientById(999L);
     }
 
     @Test
-    public void testGetAllPatients_ReturnsAllRegisteredPatients() {
+    public void testGetAllPatientsReturnsAllRegisteredPatients() {
         Patient first = patientService.registerPatient(validPatient());
 
         Patient second = validPatient();

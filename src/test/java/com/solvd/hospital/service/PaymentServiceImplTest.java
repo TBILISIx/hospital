@@ -20,7 +20,6 @@ public class PaymentServiceImplTest {
     private FakePaymentDao paymentDao;
     private PaymentServiceImpl paymentService;
 
-    //  CLASS LEVEL 
     @BeforeClass
     public void beforeClass() {
         LOGGER.info("--- Starting test class: {} ---", getClass().getSimpleName());
@@ -31,7 +30,6 @@ public class PaymentServiceImplTest {
         LOGGER.info("--- Finished test class: {} ---", getClass().getSimpleName());
     }
 
-    //  METHOD LEVEL 
     @BeforeMethod
     public void setUp() {
         paymentDao = new FakePaymentDao();
@@ -49,16 +47,16 @@ public class PaymentServiceImplTest {
         return payment;
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testCreatePayment_NoAdmissionId_ThrowsException() {
+    @Test(expectedExceptions = IllegalArgumentException.class, description = "A payment without an admissionId must be rejected")
+    public void testCreatePaymentNoAdmissionIdThrowsException() {
         Payment payment = validPayment();
         payment.setAdmissionId(null);
 
         paymentService.createPayment(payment);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testCreatePayment_ZeroAmount_ThrowsException() {
+    @Test(expectedExceptions = IllegalArgumentException.class, description = "A payment with a zero total amount must be rejected")
+    public void testCreatePaymentZeroAmountThrowsException() {
         Payment payment = validPayment();
         payment.setTotalAmount(BigDecimal.ZERO);
 
@@ -66,7 +64,7 @@ public class PaymentServiceImplTest {
     }
 
     @Test
-    public void testCreatePayment_AssignsIdAndPersists() {
+    public void testCreatePaymentAssignsIdAndPersists() {
         Payment result = paymentService.createPayment(validPayment());
 
         SoftAssert softAssert = new SoftAssert();
@@ -77,7 +75,7 @@ public class PaymentServiceImplTest {
     }
 
     @Test
-    public void testRecordPayment_PartialPayment_UpdatesPaidAmountAndStaysUnpaid() {
+    public void testRecordPaymentPartialPaymentUpdatesPaidAmountAndStaysUnpaid() {
         Payment payment = paymentService.createPayment(validPayment());
 
         paymentService.recordPayment(payment.getId(), new BigDecimal("400.00"));
@@ -85,24 +83,23 @@ public class PaymentServiceImplTest {
         Payment updated = paymentService.getPaymentForAdmission(1L);
 
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(updated.getPaidAmount(), new BigDecimal("400.00"));
-        softAssert.assertFalse(updated.isPaid());
+        softAssert.assertEquals(updated.getPaidAmount(), new BigDecimal("400.00"), "paidAmount must reflect the partial payment that was recorded");
+        softAssert.assertFalse(updated.isPaid(), "Payment must not be marked as fully paid after a partial payment");
         softAssert.assertAll();
     }
 
     @Test
-    public void testRecordPayment_FullPayment_MarksPaidTrue() {
+    public void testRecordPaymentFullPaymentMarksPaidTrue() {
         Payment payment = paymentService.createPayment(validPayment());
 
         paymentService.recordPayment(payment.getId(), new BigDecimal("1000.00"));
 
         Payment updated = paymentService.getPaymentForAdmission(1L);
-
-        Assert.assertTrue(updated.isPaid());
+        Assert.assertTrue(updated.isPaid(), "Payment must be marked as fully paid when the total amount is recorded");
     }
 
     @Test
-    public void testRecordPayment_Overpayment_CapsAtTotalAmount() {
+    public void testRecordPaymentOverpaymentCapsAtTotalAmount() {
         Payment payment = paymentService.createPayment(validPayment());
 
         paymentService.recordPayment(payment.getId(), new BigDecimal("5000.00"));
@@ -110,25 +107,25 @@ public class PaymentServiceImplTest {
         Payment updated = paymentService.getPaymentForAdmission(1L);
 
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(updated.getPaidAmount(), new BigDecimal("1000.00"));
-        softAssert.assertTrue(updated.isPaid());
+        softAssert.assertEquals(updated.getPaidAmount(), new BigDecimal("1000.00"), "paidAmount must be capped at totalAmount — overpayment is not allowed");
+        softAssert.assertTrue(updated.isPaid(), "Payment must be marked as fully paid when paidAmount reaches the cap");
         softAssert.assertAll();
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testRecordPayment_NegativeAmount_ThrowsException() {
+    @Test(expectedExceptions = IllegalArgumentException.class, description = "Recording a negative payment amount must throw IllegalArgumentException")
+    public void testRecordPaymentNegativeAmountThrowsException() {
         Payment payment = paymentService.createPayment(validPayment());
 
         paymentService.recordPayment(payment.getId(), new BigDecimal("-50.00"));
     }
 
-    @Test(expectedExceptions = RuntimeException.class)
-    public void testGetPaymentForAdmission_NotFound_ThrowsException() {
+    @Test(expectedExceptions = RuntimeException.class, description = "Looking up a payment for a non-existent admissionId must throw RuntimeException")
+    public void testGetPaymentForAdmissionNotFoundThrowsException() {
         paymentService.getPaymentForAdmission(999L);
     }
 
     @Test
-    public void testGetUnpaidPayments_ReturnsOnlyUnpaid() {
+    public void testGetUnpaidPaymentsReturnsOnlyUnpaid() {
         Payment unpaid = paymentService.createPayment(validPayment());
 
         Payment second = validPayment();
@@ -139,8 +136,8 @@ public class PaymentServiceImplTest {
         List<Payment> unpaidList = paymentService.getUnpaidPayments();
 
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(unpaidList.size(), 1);
-        softAssert.assertEquals(unpaidList.get(0).getId(), unpaid.getId());
+        softAssert.assertEquals(unpaidList.size(), 1, "Only the one unpaid payment should be returned");
+        softAssert.assertEquals(unpaidList.get(0).getId(), unpaid.getId(), "The returned payment must be the one that was never fully paid");
         softAssert.assertAll();
     }
 

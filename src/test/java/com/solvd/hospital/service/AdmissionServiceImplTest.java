@@ -57,12 +57,12 @@ public class AdmissionServiceImplTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class, description = "patientId and roomId are required / this for patient id")
     // just like in AdmissionServiceImpl in Order
-    public void testAdmitPatient_NullPatientId_ThrowsException() {
+    public void testAdmitPatientNullPatientIdThrowsException() {
         admissionService.admitPatient(validAdmission(), null, 2L);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class, description = "patientId and roomId are required / this room id")
-    public void testAdmitPatient_NullRoomId_ThrowsException() {
+    public void testAdmitPatientNullRoomIdThrowsException() {
         admissionService.admitPatient(validAdmission(), 1L, null);
     }
 
@@ -74,7 +74,7 @@ public class AdmissionServiceImplTest {
 
     @Test(description = "If admittedAt is missing, set it automatically to realtime", enabled = true)
 
-    public void testAdmitPatient_IfAdmittedAtNotSet_SetsItToNow() {
+    public void testAdmitPatientIfAdmittedAtNotSetSetsItToNow() {
         Admission result = admissionService.admitPatient(validAdmission(), 1L, 2L); // not null anymore / needed for test
 
         SoftAssert softAssert = new SoftAssert();
@@ -92,7 +92,7 @@ public class AdmissionServiceImplTest {
     }
 
     @Test(description = "If admittedAt is set, it should be kept as it is", enabled = true)
-    public void testAdmitPatient_KeepsExplicitAdmittedAt() {
+    public void testAdmitPatientKeepsExplicitAdmittedAt() {
         Admission admission = validAdmission();
         LocalDateTime fixedTime = LocalDateTime.of(2025, 5, 1, 8, 0);
         admission.setAdmittedAt(fixedTime);
@@ -103,7 +103,7 @@ public class AdmissionServiceImplTest {
     }
 
     @Test
-    public void testDischargePatient_SetsDischargedAt() {
+    public void testDischargePatientSetsDischargedAt() {
         Admission admission = admissionService.admitPatient(validAdmission(), 1L, 2L);
 
         admissionService.dischargePatient(admission.getId());
@@ -114,7 +114,7 @@ public class AdmissionServiceImplTest {
 
     @Test(expectedExceptions = RuntimeException.class, description = "After Second discharge on same id, exception should be thrown" +
             "because patient is already discharged")
-    public void testDischargePatient_AlreadyDischarged_ThrowsException() {
+    public void testDischargePatientAlreadyDischargedThrowsException() {
         Admission admission = admissionService.admitPatient(validAdmission(), 1L, 2L);
         admissionService.dischargePatient(admission.getId());
 
@@ -122,17 +122,17 @@ public class AdmissionServiceImplTest {
     }
 
     @Test(expectedExceptions = RuntimeException.class, description = "if patient is not found with admission id, should throw exception")
-    public void testDischargePatient_NotFound_ThrowsException() {
+    public void testDischargePatientNotFoundThrowsException() {
         admissionService.dischargePatient(999L);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class, description = "if admission id is null, should throw exception")
-    public void testUpdateAdmission_NullId_ThrowsException() {
+    public void testUpdateAdmissionNullIdThrowsException() {
         admissionService.updateAdmission(validAdmission());
     }
 
     @Test
-    public void testGetAdmissionsForPatient_ReturnsOnlyMatching() {
+    public void testGetAdmissionsForPatientReturnsOnlyMatching() {
         admissionService.admitPatient(validAdmission(), 1L, 2L);
         admissionService.admitPatient(validAdmission(), 2L, 3L);
 
@@ -142,7 +142,7 @@ public class AdmissionServiceImplTest {
     }
 
     @Test(description = "Should return only active admissions")
-    public void testGetActiveAdmissions_ExcludesDischarged() {
+    public void testGetActiveAdmissionsExcludesDischarged() {
         Admission first = admissionService.admitPatient(validAdmission(), 1L, 2L);
         Admission second = admissionService.admitPatient(validAdmission(), 2L, 3L);
         admissionService.dischargePatient(second.getId());
@@ -150,8 +150,8 @@ public class AdmissionServiceImplTest {
         List<Admission> active = admissionService.getActiveAdmissions();
 
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(active.size(), 1);
-        softAssert.assertEquals(active.get(0).getId(), first.getId());
+        softAssert.assertEquals(active.size(), 1,"Only the non-discharged admission should appear in active admissions");
+        softAssert.assertEquals(active.get(0).getId(), first.getId(),"The active admission must be the one that was never discharged");
         softAssert.assertAll();
     }
 

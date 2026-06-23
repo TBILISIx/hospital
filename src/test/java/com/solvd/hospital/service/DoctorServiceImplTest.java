@@ -18,7 +18,7 @@ public class DoctorServiceImplTest {
     private FakeDoctorDao doctorDao;
     private DoctorServiceImpl doctorService;
 
-    //  CLASS LEVEL 
+    //  CLASS LEVEL
     @BeforeClass
     public void beforeClass() {
         LOGGER.info("--- Starting test class: {} ---", getClass().getSimpleName());
@@ -29,7 +29,7 @@ public class DoctorServiceImplTest {
         LOGGER.info("--- Finished test class: {} ---", getClass().getSimpleName());
     }
 
-    //  METHOD LEVEL 
+    //  METHOD LEVEL
     @BeforeMethod
     public void setUp() {
         doctorDao = new FakeDoctorDao();
@@ -51,16 +51,16 @@ public class DoctorServiceImplTest {
         return doctor;
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testAddDoctor_BlankFirstName_ThrowsException() {
+    @Test(expectedExceptions = IllegalArgumentException.class, description = "A blank first name must be rejected with IllegalArgumentException")
+    public void testAddDoctorBlankFirstNameThrowsException() {
         Doctor doctor = validDoctor();
         doctor.setFirstName(" ");
 
         doctorService.addDoctor(doctor);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testAddDoctor_NullDepartmentId_ThrowsException() {
+    @Test(expectedExceptions = IllegalArgumentException.class,description = "A null departmentId must be rejected with IllegalArgumentException")
+    public void testAddDoctorNullDepartmentIdThrowsException() {
         Doctor doctor = validDoctor();
         doctor.setDepartmentId(null);
 
@@ -68,18 +68,18 @@ public class DoctorServiceImplTest {
     }
 
     @Test
-    public void testAddDoctor_AssignsIdAndPersists() {
+    public void testAddDoctorAssignsIdAndPersists() {
         Doctor result = doctorService.addDoctor(validDoctor());
 
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertNotNull(result.getId());
+        softAssert.assertNotNull(result.getId(),"An id must be assigned to the doctor after creation");
         softAssert.assertEquals(result.getSpecialization(), "Cardiologist");
         softAssert.assertTrue(result.isAvailable(), "New doctors should be available by default");
         softAssert.assertAll();
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testUpdateDoctor_NullId_ThrowsException() {
+    @Test(expectedExceptions = IllegalArgumentException.class,description = "Updating a doctor without an id must throw IllegalArgumentException")
+    public void testUpdateDoctorNullIdThrowsException() {
         Doctor doctor = validDoctor();
         doctor.setId(null);
 
@@ -87,7 +87,7 @@ public class DoctorServiceImplTest {
     }
 
     @Test
-    public void testRemoveDoctor_RemovesFromStore() {
+    public void testRemoveDoctorRemovesFromStore() {
         Doctor doctor = doctorService.addDoctor(validDoctor());
 
         doctorService.removeDoctor(doctor.getId());
@@ -96,13 +96,13 @@ public class DoctorServiceImplTest {
                 () -> doctorService.getDoctorById(doctor.getId()));
     }
 
-    @Test(expectedExceptions = RuntimeException.class)
-    public void testGetDoctorById_NotFound_ThrowsException() {
+    @Test(expectedExceptions = RuntimeException.class,description = "Looking up a non-existent doctor id must throw RuntimeException")
+    public void testGetDoctorByIdNotFoundThrowsException() {
         doctorService.getDoctorById(123L);
     }
 
     @Test
-    public void testGetAvailableDoctors_FiltersOnlyAvailable() {
+    public void testGetAvailableDoctorsFiltersOnlyAvailable() {
         Doctor available = doctorService.addDoctor(validDoctor());
 
         Doctor unavailable = validDoctor();
@@ -113,12 +113,12 @@ public class DoctorServiceImplTest {
 
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertEquals(result.size(), 1, "Only one doctor should be available");
-        softAssert.assertEquals(result.get(0).getId(), available.getId());
+        softAssert.assertEquals(result.get(0).getId(), available.getId(), "The returned doctor must be the one marked as available");
         softAssert.assertAll();
     }
 
     @Test
-    public void testSetAvailability_UpdatesFlag() {
+    public void testSetAvailabilityUpdatesFlag() {
         Doctor doctor = doctorService.addDoctor(validDoctor());
 
         doctorService.setAvailability(doctor.getId(), false);
