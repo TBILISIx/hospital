@@ -22,7 +22,7 @@
 
         <!-- Default suite to run. Override in the command line for example like this :
              mvn test -DsuiteXmlFile=src/test/resources/testng-suite-clinical-operations.xml -->
-        <suiteXmlFile>src/test/resources/testng-suite-people.xml</suiteXmlFile>
+        <suiteXmlFile>testng-suite-people</suiteXmlFile>
 
     </properties>
 
@@ -104,7 +104,7 @@
                     <suiteXmlFiles>
 <!--                        <suiteXmlFile>src/test/resources/testng-suite-people.xml</suiteXmlFile>-->
 <!--                        <suiteXmlFile>src/test/resources/testng-suite-clinical-operations.xml</suiteXmlFile>-->
-                        <suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
+                        <suiteXmlFile>src/test/resources/${suiteXmlFile}.xml</suiteXmlFile>
 
                     </suiteXmlFiles>
 
